@@ -8,35 +8,46 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import Drawer from "@mui/material/Drawer";
+import { Icon, Menu, MenuList } from "@mui/material"; // Import for dropdown
 import logo from "../../assets/icons/logo.svg";
 import { Reorder } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 
 function WebNav({ mode, toggleColorMode }) {
   const isAdmin = useSelector((state) => state.isAdmin);
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState("Home");
+  const [anchorEl, setAnchorEl] = React.useState(null); // For dropdown anchor
+  const [dropdownOpen, setDropdownOpen] = React.useState(false); // Dropdown state
+
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
   };
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  const handleCloseMenu = () => {
+    setDropdownOpen(false);
+  };
+
   const w = window.screen.width;
 
   const logoStyle = {
     width: "10rem",
     height: "3.5rem",
-
     cursor: "pointer",
     margin: w < 901 ? " 0  4rem 0 1rem" : " 0  4rem 0 2rem",
   };
 
-  const scrollToSection = (sectionId) => {};
-
   return (
     <AppBar
       position="relative"
-      // data-aos="fade-down"
       sx={{
         boxShadow: 0,
         bgcolor: "transparent",
@@ -68,12 +79,7 @@ function WebNav({ mode, toggleColorMode }) {
               marginRight: "3rem",
             }}
           >
-            <img
-              src={logo}
-              onClick={() => scrollToSection("intro")}
-              style={logoStyle}
-              alt="logo of sitemark"
-            />
+            <img src={logo} style={logoStyle} alt="logo of sitemark" />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <MenuItem
                 onClick={() => setActive("Home")}
@@ -90,7 +96,7 @@ function WebNav({ mode, toggleColorMode }) {
                   variant="body2"
                   color="text.primary"
                   sx={{
-                    position: "relative", // Ensure the pseudo-element is positioned correctly
+                    position: "relative",
                     color: active === "Home" ? "#519d8a" : "#272727",
                     fontSize: "1.1rem",
                     fontWeight: "550",
@@ -100,7 +106,7 @@ function WebNav({ mode, toggleColorMode }) {
                     transform: active === "Home" ? "scale(1.05)" : "scale(1)",
                     letterSpacing: "0.06rem",
                     "&:hover": {
-                      color: "#519d8a", // Hover effect for text color
+                      color: "#519d8a",
                     },
                   }}
                 >
@@ -121,7 +127,7 @@ function WebNav({ mode, toggleColorMode }) {
               </MenuItem>
 
               <MenuItem
-                onClick={() => setActive("Categories")}
+                onClick={handleMenuClick} // Open dropdown
                 sx={{
                   py: "6px",
                   px: "24px",
@@ -135,7 +141,8 @@ function WebNav({ mode, toggleColorMode }) {
                   variant="body2"
                   color="text.primary"
                   sx={{
-                    position: "relative", // Ensure the pseudo-element is positioned correctly
+                    position: "relative",
+
                     color: active === "Categories" ? "#519d8a" : "#272727",
                     fontSize: "1.1rem",
                     fontWeight: "550",
@@ -146,11 +153,15 @@ function WebNav({ mode, toggleColorMode }) {
                       active === "Categories" ? "scale(1.05)" : "scale(1)",
                     letterSpacing: "0.06rem",
                     "&:hover": {
-                      color: "#519d8a", // Change the color to green on hover
+                      color: "#519d8a",
                     },
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
-                  Categories
+                  Webinar
+                  {!dropdownOpen ? <BiChevronDown /> : <BiChevronUp />}
                   <span
                     style={{
                       position: "absolute",
@@ -165,6 +176,38 @@ function WebNav({ mode, toggleColorMode }) {
                   />
                 </Typography>
               </MenuItem>
+
+              <Menu
+                anchorEl={anchorEl} // Set anchor for dropdown
+                open={dropdownOpen} // Open state for dropdown
+                onClose={handleCloseMenu} // Close dropdown
+                sx={{ mt: 2 }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    setActive("Categories");
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Webinar 1
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setActive("Categories");
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Webinar 2
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setActive("Categories");
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Webinar 3
+                </MenuItem>
+              </Menu>
               <MenuItem
                 onClick={() => setActive("Contact")}
                 sx={{
@@ -180,7 +223,7 @@ function WebNav({ mode, toggleColorMode }) {
                   variant="body2"
                   color="text.primary"
                   sx={{
-                    position: "relative", // Ensure the pseudo-element is positioned correctly
+                    position: "relative",
                     color: active === "Contact" ? "#519d8a" : "#272727",
                     fontSize: "1.1rem",
                     fontWeight: "550",
@@ -191,101 +234,11 @@ function WebNav({ mode, toggleColorMode }) {
                       active === "Contact" ? "scale(1.05)" : "scale(1)",
                     letterSpacing: "0.06rem",
                     "&:hover": {
-                      color: "#519d8a", // Change the color to green on hover
+                      color: "#519d8a",
                     },
                   }}
                 >
                   Contact
-                  <span
-                    style={{
-                      position: "absolute",
-                      bottom: -10,
-                      left: 0,
-                      width: "1.4rem",
-                      height: "7px",
-                      backgroundColor:
-                        active === "Contact" ? "#408A78" : "transparent",
-                      borderRadius: "1rem",
-                    }}
-                  />
-                </Typography>
-              </MenuItem>
-              <MenuItem
-                onClick={() => setActive("Contact")}
-                sx={{
-                  py: "6px",
-                  px: "24px",
-                  "&:hover": {
-                    backgroundColor: "transparent",
-                    color: "#519d8a",
-                  },
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  color="text.primary"
-                  sx={{
-                    position: "relative", // Ensure the pseudo-element is positioned correctly
-                    color: active === "Contact" ? "#519d8a" : "#272727",
-                    fontSize: "1.1rem",
-                    fontWeight: "550",
-                    marginRight: "0.1rem",
-                    textTransform: "capitalize",
-                    transition: "all .5s",
-                    transform:
-                      active === "Contact" ? "scale(1.05)" : "scale(1)",
-                    letterSpacing: "0.06rem",
-                    "&:hover": {
-                      color: "#519d8a", // Change the color to green on hover
-                    },
-                  }}
-                >
-                  Courses
-                  <span
-                    style={{
-                      position: "absolute",
-                      bottom: -10,
-                      left: 0,
-                      width: "1.4rem",
-                      height: "7px",
-                      backgroundColor:
-                        active === "Contact" ? "#408A78" : "transparent",
-                      borderRadius: "1rem",
-                    }}
-                  />
-                </Typography>
-              </MenuItem>
-              <MenuItem
-                onClick={() => setActive("Contact")}
-                sx={{
-                  py: "6px",
-                  px: "24px",
-                  "&:hover": {
-                    backgroundColor: "transparent",
-                    color: "#519d8a",
-                  },
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  color="text.primary"
-                  sx={{
-                    position: "relative", // Ensure the pseudo-element is positioned correctly
-                    color: active === "Contact" ? "#519d8a" : "#272727",
-                    fontSize: "1.1rem",
-                    fontWeight: "550",
-
-                    textTransform: "capitalize",
-                    transition: "all .5s",
-                    transform:
-                      active === "Contact" ? "scale(1.05)" : "scale(1)",
-                    letterSpacing: "0.06rem",
-                    "&:hover": {
-                      color: "#519d8a", // Change the color to green on hover
-                    },
-                  }}
-                >
-                  Courses
                   <span
                     style={{
                       position: "absolute",
@@ -310,7 +263,6 @@ function WebNav({ mode, toggleColorMode }) {
             }}
           >
             <Button
-              // size="small"
               component="a"
               target="_blank"
               style={{
@@ -358,22 +310,12 @@ function WebNav({ mode, toggleColorMode }) {
                     flexGrow: 1,
                   }}
                 ></Box>
-                <MenuItem onClick={() => scrollToSection("overview")}>
-                  Overview
-                </MenuItem>
-                <MenuItem onClick={() => scrollToSection("services")}>
-                  Services
-                </MenuItem>
-                <MenuItem onClick={() => scrollToSection("startwithus")}>
-                  Start With Us
-                </MenuItem>
-                <MenuItem onClick={() => scrollToSection("contact-us")}>
-                  Contact Us
-                </MenuItem>{" "}
-                {/* <MenuItem onClick={() => scrollToSection("faq")}>FAQ</MenuItem> */}
+                <MenuItem>Overview</MenuItem>
+                <MenuItem>Services</MenuItem>
+                <MenuItem>Start With Us</MenuItem>
+                <MenuItem>Contact Us</MenuItem>
                 <Divider />
                 <MenuItem>
-                  {" "}
                   {!isLoggedIn && (
                     <Button
                       color="primary"
@@ -422,15 +364,15 @@ function WebNav({ mode, toggleColorMode }) {
                         to={"/user-panel/home"}
                         style={{ textDecoration: "none", color: "white" }}
                       >
-                        Dashboard
+                        User Panel
                       </Link>
                     )}
                     {isLoggedIn && isAdmin && (
                       <Link
-                        to={"/admin-panel/orders"}
+                        to={"/admin"}
                         style={{ textDecoration: "none", color: "white" }}
                       >
-                        Dashboard
+                        Admin Panel
                       </Link>
                     )}
                   </Button>

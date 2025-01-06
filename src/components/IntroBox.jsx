@@ -12,6 +12,7 @@ const IntroBox = () => {
         width: "90%",
         margin: "auto",
         gap: "2rem",
+        marginTop: "2rem",
       }}
     >
       <WebinarCard data-aos="fade-up" />
