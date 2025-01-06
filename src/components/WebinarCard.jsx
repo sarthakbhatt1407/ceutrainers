@@ -4,7 +4,9 @@ import { ClockCircleOutlined, AudioOutlined } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
 
-const WebinarCard = () => {
+const WebinarCard = (props) => {
+  const webinar = props.webinar;
+
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -13,7 +15,7 @@ const WebinarCard = () => {
         width: "370px",
         display: "flex",
         flexDirection: "column",
-        height: "370px", // Set a fixed height for the card
+        height: "400px", // Set a fixed height for the card
         borderRadius: "10px",
         overflow: "hidden",
         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
@@ -31,11 +33,11 @@ const WebinarCard = () => {
       <div
         style={{
           width: "100%",
-          height: "150px",
-          backgroundImage:
-            "url('https://via.placeholder.com/350x150?text=Webinar+Image')", // Replace with your image URL
-          backgroundSize: "cover",
+          height: "170px",
+          background: `url(https://ceuservices.com/${webinar.thumbnail_url})`,
+          backgroundSize: "cover", // Change to 'contain'
           backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
           position: "relative",
         }}
       >
@@ -62,7 +64,7 @@ const WebinarCard = () => {
                 fontSize: "12px",
               }}
             >
-              13:00:00 EST
+              {webinar.time}
             </Tag>
           </Col>
           <Col>
@@ -74,12 +76,11 @@ const WebinarCard = () => {
                 fontSize: "12px",
               }}
             >
-              29 Jan
+              {webinar.date.split(",")[0]}
             </Tag>
           </Col>
         </Row>
       </div>
-
       {/* Main Heading and Content */}
       <div
         style={{
@@ -109,9 +110,7 @@ const WebinarCard = () => {
                 lineHeight: 1.5,
               }}
             >
-              Updating Employee Handbooks in 2025:
-              <br />
-              Learn the Changes that Impact Employees!
+              {webinar.title}
             </Title>
           </Col>
         </Row>
@@ -125,7 +124,7 @@ const WebinarCard = () => {
                 color: "#666",
               }}
             >
-              <ClockCircleOutlined /> Duration: 90 Mins
+              <ClockCircleOutlined /> Duration: {webinar.duration} Mins
             </Text>
           </Col>
           <Col>

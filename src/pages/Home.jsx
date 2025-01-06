@@ -8,18 +8,11 @@ import PagaeHeader from "../components/PagaeHeader";
 import PageBuffer from "../components/PageBuffer";
 
 const Home = () => {
-  const [open, setOpen] = useState(false);
-  const onChange = (checked) => {
-    setOpen(!open);
-  };
   return (
     <>
       <WebNav />
 
       <div>
-        {/* <PageBuffer /> */}
-        <PagaeHeader />
-        <IntroBox />
         <Footer />
       </div>
     </>

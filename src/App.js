@@ -5,6 +5,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 import { useDispatch, useSelector } from "react-redux";
+import Webinars from "./pages/Webinars";
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -34,6 +35,7 @@ const App = () => {
     <div>
       <Routes>
         <Route path="/" exact element={<Home />} />
+        <Route path="/webinars" exact element={<Webinars />} />
 
         <Route path="*" exact element={<Home />} />
       </Routes>

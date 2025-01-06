@@ -11,15 +11,20 @@ import Drawer from "@mui/material/Drawer";
 import { Icon, Menu, MenuList } from "@mui/material"; // Import for dropdown
 import logo from "../../assets/icons/logo.svg";
 import { Reorder } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 
 function WebNav({ mode, toggleColorMode }) {
+  const navigate = useNavigate();
+  const path = useLocation().pathname;
+
   const isAdmin = useSelector((state) => state.isAdmin);
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const [open, setOpen] = React.useState(false);
-  const [active, setActive] = React.useState("Home");
+  const [active, setActive] = React.useState(
+    path.split("/")[1] ? path.split("/")[1] : "Home"
+  );
   const [anchorEl, setAnchorEl] = React.useState(null); // For dropdown anchor
   const [dropdownOpen, setDropdownOpen] = React.useState(false); // Dropdown state
 
@@ -82,7 +87,10 @@ function WebNav({ mode, toggleColorMode }) {
             <img src={logo} style={logoStyle} alt="logo of sitemark" />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <MenuItem
-                onClick={() => setActive("Home")}
+                onClick={() => {
+                  setActive("Home");
+                  navigate("/");
+                }}
                 sx={{
                   py: "6px",
                   px: "24px",
@@ -143,14 +151,14 @@ function WebNav({ mode, toggleColorMode }) {
                   sx={{
                     position: "relative",
 
-                    color: active === "Categories" ? "#519d8a" : "#272727",
+                    color: active === "webinars" ? "#519d8a" : "#272727",
                     fontSize: "1.1rem",
                     fontWeight: "550",
                     marginRight: "0.1rem",
                     textTransform: "capitalize",
                     transition: "all .5s",
                     transform:
-                      active === "Categories" ? "scale(1.05)" : "scale(1)",
+                      active === "webinars" ? "scale(1.05)" : "scale(1)",
                     letterSpacing: "0.06rem",
                     "&:hover": {
                       color: "#519d8a",
@@ -170,7 +178,7 @@ function WebNav({ mode, toggleColorMode }) {
                       width: "1.4rem",
                       height: "7px",
                       backgroundColor:
-                        active === "Categories" ? "#408A78" : "transparent",
+                        active === "webinars" ? "#408A78" : "transparent",
                       borderRadius: "1rem",
                     }}
                   />
@@ -185,7 +193,8 @@ function WebNav({ mode, toggleColorMode }) {
               >
                 <MenuItem
                   onClick={() => {
-                    setActive("Categories");
+                    setActive("webinars");
+                    navigate("/webinars");
                     setDropdownOpen(false);
                   }}
                 >
@@ -193,7 +202,8 @@ function WebNav({ mode, toggleColorMode }) {
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
-                    setActive("Categories");
+                    setActive("webinars");
+                    navigate("/webinars");
                     setDropdownOpen(false);
                   }}
                 >
@@ -201,7 +211,8 @@ function WebNav({ mode, toggleColorMode }) {
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
-                    setActive("Categories");
+                    setActive("webinars");
+                    navigate("/webinars");
                     setDropdownOpen(false);
                   }}
                 >

@@ -216,15 +216,15 @@ const Footer = () => {
                 target="_blank"
                 to={"https://maps.app.goo.gl/6ccoSexVq3rMYA1r6"}
               >
-                <LocationCity /> Tarun Vihar Lane 4, mothrowala road,
-                banjarawla, near sidheshwar temple.
+                <LocationCity />
+                loerm20, ipsum dolor sit amet, consectetur
               </Link>
             </span>
           </div>
         </MidDiv>
       </FirstDiv>
       <SecondDiv>
-        <p>Copyright © 2024 Rivaaz Films. All rights reserved.</p>
+        <p>Copyright © 2024 XYZ. All rights reserved.</p>
       </SecondDiv>
     </MainDiv>
   );
