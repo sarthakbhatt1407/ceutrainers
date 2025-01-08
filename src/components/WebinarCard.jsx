@@ -112,8 +112,8 @@ const WebinarCard = (props) => {
                 fontSize: "22px",
                 fontWeight: "bold",
                 margin: "0",
-                color: "#0056b3",
-                textAlign: "center",
+                color: "black",
+                textAlign: "left",
                 lineHeight: 1.5,
               }}
             >
@@ -126,7 +126,14 @@ const WebinarCard = (props) => {
         <Row
           justify="space-between"
           align="middle"
-          style={{ width: "90%", padding: "0 1rem", marginBottom: "1rem" }}
+          style={{
+            width: "90%",
+            padding: "0 1rem",
+            marginBottom: "1rem",
+            flexDirection: "row",
+            justifyContent: "start",
+            gap: "2rem",
+          }}
         >
           <Col
             style={{
@@ -180,8 +187,15 @@ const WebinarCard = (props) => {
         </Row>
         <Row
           justify="space-between"
-          align="middle"
-          style={{ width: "90%", padding: "0 1rem" }}
+          // align="middle"
+          style={{
+            width: "90%",
+            padding: "0 1rem",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "start",
+            gap: "2rem",
+          }}
         >
           <Col style={{}}>
             <Text
@@ -232,7 +246,16 @@ const WebinarCard = (props) => {
             display: hovered ? "flex" : "none", // Show button only on hover
           }}
         >
-          <Button type="primary" shape="round" size="large">
+          <Button
+            type="primary"
+            shape="round"
+            size="large"
+            style={{
+              backgroundColor: "#9CD161",
+              borderColor: "#9CD161",
+              fontWeight: "bold",
+            }}
+          >
             Learn More
           </Button>
         </div>

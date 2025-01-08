@@ -8,7 +8,7 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import Drawer from "@mui/material/Drawer";
-import { Icon, Menu, MenuList } from "@mui/material"; // Import for dropdown
+import { Menu } from "@mui/material"; // Import for dropdown
 import logo from "../../assets/icons/logo.svg";
 import { Reorder } from "@mui/icons-material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -26,7 +26,9 @@ function WebNav({ mode, toggleColorMode }) {
     path.split("/")[1] ? path.split("/")[1] : "Home"
   );
   const [anchorEl, setAnchorEl] = React.useState(null); // For dropdown anchor
+  const [anchorEl2, setAnchorEl2] = React.useState(null); // For dropdown anchor
   const [dropdownOpen, setDropdownOpen] = React.useState(false); // Dropdown state
+  const [dropdownOpen2, setDropdownOpen2] = React.useState(false); // Dropdown state
 
   const toggleDrawer = (newOpen) => () => {
     setOpen(newOpen);
@@ -71,6 +73,7 @@ function WebNav({ mode, toggleColorMode }) {
             flexShrink: 0,
             borderRadius: "10px",
             maxHeight: 40,
+            fontFamily: "Raleway",
           })}
         >
           <Box
@@ -86,6 +89,91 @@ function WebNav({ mode, toggleColorMode }) {
           >
             <img src={logo} style={logoStyle} alt="logo of sitemark" />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <MenuItem
+                onClick={handleMenuClick} // Open dropdown
+                sx={{
+                  py: "6px",
+                  px: "24px",
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                    color: "#519d8a",
+                  },
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  color="text.primary"
+                  sx={{
+                    position: "relative",
+
+                    color: active === "categories" ? "#519d8a" : "#272727",
+                    fontSize: "1.1rem",
+                    fontWeight: "550",
+                    marginRight: "0.1rem",
+                    textTransform: "capitalize",
+                    transition: "all .5s",
+                    transform:
+                      active === "categories" ? "scale(1.05)" : "scale(1)",
+                    letterSpacing: "0.06rem",
+                    "&:hover": {
+                      color: "#519d8a",
+                    },
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  Categories
+                  {!dropdownOpen ? <BiChevronDown /> : <BiChevronUp />}
+                  <span
+                    style={{
+                      position: "absolute",
+                      bottom: -10,
+                      left: 0,
+                      width: "1.4rem",
+                      height: "7px",
+                      backgroundColor:
+                        active === "categories" ? "#408A78" : "transparent",
+                      borderRadius: "1rem",
+                    }}
+                  />
+                </Typography>
+              </MenuItem>
+
+              <Menu
+                anchorEl={anchorEl} // Set anchor for dropdown
+                open={dropdownOpen} // Open state for dropdown
+                onClose={handleCloseMenu} // Close dropdown
+                sx={{ mt: 2 }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    setActive("webinars");
+                    navigate("/webinars");
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Category 1
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setActive("webinars");
+                    navigate("/webinars");
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Category 2
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setActive("webinars");
+                    navigate("/webinars");
+                    setDropdownOpen(false);
+                  }}
+                >
+                  Category 3
+                </MenuItem>
+              </Menu>
               <MenuItem
                 onClick={() => {
                   setActive("Home");
@@ -118,7 +206,7 @@ function WebNav({ mode, toggleColorMode }) {
                     },
                   }}
                 >
-                  Home
+                  Webinar
                   <span
                     style={{
                       position: "absolute",
@@ -133,9 +221,56 @@ function WebNav({ mode, toggleColorMode }) {
                   />
                 </Typography>
               </MenuItem>
-
               <MenuItem
-                onClick={handleMenuClick} // Open dropdown
+                onClick={() => setActive("Contact")}
+                sx={{
+                  py: "6px",
+                  px: "24px",
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                    color: "#519d8a",
+                  },
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  color="text.primary"
+                  sx={{
+                    position: "relative",
+                    color: active === "Contact" ? "#519d8a" : "#272727",
+                    fontSize: "1.1rem",
+                    fontWeight: "550",
+                    marginRight: "0.1rem",
+                    textTransform: "capitalize",
+                    transition: "all .5s",
+                    transform:
+                      active === "Contact" ? "scale(1.05)" : "scale(1)",
+                    letterSpacing: "0.06rem",
+                    "&:hover": {
+                      color: "#519d8a",
+                    },
+                  }}
+                >
+                  Who we are?
+                  <span
+                    style={{
+                      position: "absolute",
+                      bottom: -10,
+                      left: 0,
+                      width: "1.4rem",
+                      height: "7px",
+                      backgroundColor:
+                        active === "Contact" ? "#408A78" : "transparent",
+                      borderRadius: "1rem",
+                    }}
+                  />
+                </Typography>
+              </MenuItem>
+              <MenuItem
+                onClick={(event) => {
+                  setAnchorEl2(event.currentTarget);
+                  setDropdownOpen2(!dropdownOpen2);
+                }} // Open dropdown
                 sx={{
                   py: "6px",
                   px: "24px",
@@ -168,8 +303,8 @@ function WebNav({ mode, toggleColorMode }) {
                     alignItems: "center",
                   }}
                 >
-                  Webinar
-                  {!dropdownOpen ? <BiChevronDown /> : <BiChevronUp />}
+                  Help
+                  {!dropdownOpen2 ? <BiChevronDown /> : <BiChevronUp />}
                   <span
                     style={{
                       position: "absolute",
@@ -186,8 +321,8 @@ function WebNav({ mode, toggleColorMode }) {
               </MenuItem>
 
               <Menu
-                anchorEl={anchorEl} // Set anchor for dropdown
-                open={dropdownOpen} // Open state for dropdown
+                anchorEl={anchorEl2} // Set anchor for dropdown
+                open={dropdownOpen2} // Open state for dropdown
                 onClose={handleCloseMenu} // Close dropdown
                 sx={{ mt: 2 }}
               >
@@ -198,7 +333,7 @@ function WebNav({ mode, toggleColorMode }) {
                     setDropdownOpen(false);
                   }}
                 >
-                  Webinar 1
+                  Get in touch
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
@@ -207,63 +342,9 @@ function WebNav({ mode, toggleColorMode }) {
                     setDropdownOpen(false);
                   }}
                 >
-                  Webinar 2
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    setActive("webinars");
-                    navigate("/webinars");
-                    setDropdownOpen(false);
-                  }}
-                >
-                  Webinar 3
+                  FAQ
                 </MenuItem>
               </Menu>
-              <MenuItem
-                onClick={() => setActive("Contact")}
-                sx={{
-                  py: "6px",
-                  px: "24px",
-                  "&:hover": {
-                    backgroundColor: "transparent",
-                    color: "#519d8a",
-                  },
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  color="text.primary"
-                  sx={{
-                    position: "relative",
-                    color: active === "Contact" ? "#519d8a" : "#272727",
-                    fontSize: "1.1rem",
-                    fontWeight: "550",
-                    marginRight: "0.1rem",
-                    textTransform: "capitalize",
-                    transition: "all .5s",
-                    transform:
-                      active === "Contact" ? "scale(1.05)" : "scale(1)",
-                    letterSpacing: "0.06rem",
-                    "&:hover": {
-                      color: "#519d8a",
-                    },
-                  }}
-                >
-                  Contact
-                  <span
-                    style={{
-                      position: "absolute",
-                      bottom: -10,
-                      left: 0,
-                      width: "1.4rem",
-                      height: "7px",
-                      backgroundColor:
-                        active === "Contact" ? "#408A78" : "transparent",
-                      borderRadius: "1rem",
-                    }}
-                  />
-                </Typography>
-              </MenuItem>
             </Box>
           </Box>
           <Box
