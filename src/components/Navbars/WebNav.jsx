@@ -291,7 +291,7 @@ function WebNav({ mode, toggleColorMode }) {
                   fontSize: ".9rem",
                 }}
               >
-                Book Today
+                Register
               </Link>
             </Button>
           </Box>

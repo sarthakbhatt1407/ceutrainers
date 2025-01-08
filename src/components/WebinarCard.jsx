@@ -1,21 +1,26 @@
 import React, { useState } from "react";
 import { Card, Typography, Row, Col, Tag, Button } from "antd";
 import { ClockCircleOutlined, AudioOutlined } from "@ant-design/icons";
+import { CalendarMonthOutlined } from "@mui/icons-material";
+import { useNavigate } from "react-router";
 
 const { Title, Text } = Typography;
 
 const WebinarCard = (props) => {
   const webinar = props.webinar;
-
+  const navigate = useNavigate();
   const [hovered, setHovered] = useState(false);
 
   return (
     <Card
+      onClick={() => {
+        navigate(`/webinars/${webinar.id}`);
+      }}
       style={{
-        width: "370px",
+        width: "400px",
         display: "flex",
         flexDirection: "column",
-        height: "400px", // Set a fixed height for the card
+        height: "540px", // Set a fixed height for the card
         borderRadius: "10px",
         overflow: "hidden",
         boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
@@ -33,15 +38,19 @@ const WebinarCard = (props) => {
       <div
         style={{
           width: "100%",
-          height: "170px",
-          background: `url(https://ceuservices.com/${webinar.thumbnail_url})`,
-          backgroundSize: "cover", // Change to 'contain'
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
+          height: "220px",
           position: "relative",
         }}
       >
-        {/* Time and Date Overlay */}
+        <img
+          src={`https://ceuservices.com/${webinar.thumbnail_url}`}
+          alt="Webinar Thumbnail"
+          style={{
+            width: "100%",
+            height: "100%", // Maintain aspect ratio
+          }}
+        />
+
         <Row
           justify="space-between"
           style={{
@@ -84,16 +93,14 @@ const WebinarCard = (props) => {
       {/* Main Heading and Content */}
       <div
         style={{
-          position: "relative", // Make the content overlap the image
+          position: "relative",
           transition: "all 0.5s ease",
           marginTop: hovered ? "-10%" : "0", // Move the content upwards when hovered
-          backgroundColor: hovered ? "white" : "white",
+          backgroundColor: "white",
           padding: ".5rem .7rem",
-          height: "65%",
-          // backgroundColor: "red",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-around",
+          display: "grid",
+          gridTemplateColumns: "1fr", // 1fr for each column
+          gap: "1rem",
         }}
       >
         {/* Main Heading */}
@@ -102,7 +109,7 @@ const WebinarCard = (props) => {
             <Title
               level={4}
               style={{
-                fontSize: "18px",
+                fontSize: "22px",
                 fontWeight: "bold",
                 margin: "0",
                 color: "#0056b3",
@@ -116,28 +123,109 @@ const WebinarCard = (props) => {
         </Row>
 
         {/* Duration and Speaker */}
-        <Row justify="space-between" align="middle">
-          <Col>
+        <Row
+          justify="space-between"
+          align="middle"
+          style={{ width: "90%", padding: "0 1rem", marginBottom: "1rem" }}
+        >
+          <Col
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <Text
               style={{
-                fontSize: "13px",
+                fontSize: "16px",
                 color: "#666",
+                fontSize: "16px",
+                color: "#666",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
               }}
             >
-              <ClockCircleOutlined /> Duration: {webinar.duration} Mins
+              <ClockCircleOutlined
+                style={{
+                  color: "#9CD161",
+                  marginRight: 3,
+                  transform: "scale(1.2)",
+                }}
+              />{" "}
+              Duration: {webinar.duration} Mins
             </Text>
           </Col>
           <Col>
             <Text
               style={{
-                fontSize: "13px",
+                fontSize: "16px",
                 color: "#666",
+                fontSize: "16px",
+                color: "#666",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
               }}
             >
-              <AudioOutlined /> Margie Faulk
+              <AudioOutlined
+                style={{
+                  color: "#9CD161",
+                  marginRight: 3,
+                  transform: "scale(1.2)",
+                }}
+              />{" "}
+              Margie Faulk
             </Text>
           </Col>
         </Row>
+        <Row
+          justify="space-between"
+          align="middle"
+          style={{ width: "90%", padding: "0 1rem" }}
+        >
+          <Col style={{}}>
+            <Text
+              style={{
+                fontSize: "16px",
+                color: "#666",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+              }}
+            >
+              <CalendarMonthOutlined
+                style={{
+                  color: "#9CD161",
+                  marginRight: 3,
+                  transform: "scale(1.2)",
+                }}
+              />{" "}
+              {webinar.date}
+            </Text>
+          </Col>
+          <Col>
+            <Text
+              style={{
+                fontSize: "16px",
+                color: "#666",
+                color: "#666",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+              }}
+            >
+              <AudioOutlined
+                style={{
+                  color: "#9CD161",
+                  marginRight: 3,
+                  transform: "scale(1.2)",
+                }}
+              />{" "}
+              {webinar.time}
+            </Text>
+          </Col>
+        </Row>
+
         {/* Learn More Button on Hover */}
         <div
           style={{
