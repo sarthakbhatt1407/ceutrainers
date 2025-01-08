@@ -37,6 +37,7 @@ function WebNav({ mode, toggleColorMode }) {
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
     setDropdownOpen(!dropdownOpen);
+    console.log(dropdownOpen2);
   };
 
   const handleCloseMenu = () => {
@@ -176,8 +177,8 @@ function WebNav({ mode, toggleColorMode }) {
               </Menu>
               <MenuItem
                 onClick={() => {
-                  setActive("Home");
-                  navigate("/");
+                  setActive("webinars");
+                  navigate("/webinars");
                 }}
                 sx={{
                   py: "6px",
@@ -193,13 +194,14 @@ function WebNav({ mode, toggleColorMode }) {
                   color="text.primary"
                   sx={{
                     position: "relative",
-                    color: active === "Home" ? "#519d8a" : "#272727",
+                    color: active === "webinars" ? "#519d8a" : "#272727",
                     fontSize: "1.1rem",
                     fontWeight: "550",
                     marginRight: "0.1rem",
                     textTransform: "capitalize",
                     transition: "all .5s",
-                    transform: active === "Home" ? "scale(1.05)" : "scale(1)",
+                    transform:
+                      active === "webinars" ? "scale(1.05)" : "scale(1)",
                     letterSpacing: "0.06rem",
                     "&:hover": {
                       color: "#519d8a",
@@ -215,7 +217,7 @@ function WebNav({ mode, toggleColorMode }) {
                       width: "1.4rem",
                       height: "7px",
                       backgroundColor:
-                        active === "Home" ? "#408A78" : "transparent",
+                        active === "webinars" ? "#408A78" : "transparent",
                       borderRadius: "1rem",
                     }}
                   />
@@ -286,14 +288,13 @@ function WebNav({ mode, toggleColorMode }) {
                   sx={{
                     position: "relative",
 
-                    color: active === "webinars" ? "#519d8a" : "#272727",
+                    color: active === "help" ? "#519d8a" : "#272727",
                     fontSize: "1.1rem",
                     fontWeight: "550",
                     marginRight: "0.1rem",
                     textTransform: "capitalize",
                     transition: "all .5s",
-                    transform:
-                      active === "webinars" ? "scale(1.05)" : "scale(1)",
+                    transform: active === "help" ? "scale(1.05)" : "scale(1)",
                     letterSpacing: "0.06rem",
                     "&:hover": {
                       color: "#519d8a",
@@ -313,7 +314,7 @@ function WebNav({ mode, toggleColorMode }) {
                       width: "1.4rem",
                       height: "7px",
                       backgroundColor:
-                        active === "webinars" ? "#408A78" : "transparent",
+                        active === "help" ? "#408A78" : "transparent",
                       borderRadius: "1rem",
                     }}
                   />
@@ -328,8 +329,8 @@ function WebNav({ mode, toggleColorMode }) {
               >
                 <MenuItem
                   onClick={() => {
-                    setActive("webinars");
-                    navigate("/webinars");
+                    setActive("help");
+                    navigate("/");
                     setDropdownOpen(false);
                   }}
                 >
@@ -337,8 +338,8 @@ function WebNav({ mode, toggleColorMode }) {
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
-                    setActive("webinars");
-                    navigate("/webinars");
+                    setActive("help");
+                    navigate("/");
                     setDropdownOpen(false);
                   }}
                 >
