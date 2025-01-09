@@ -39,15 +39,16 @@ const BreadCumbBox = styled.div`
     letter-spacing: 0.09rem;
   }
 `;
-const PagaeHeader = () => {
+const PagaeHeader = (props) => {
+  const heading = props.heading;
   return (
     <div>
       <HeaderBox>
-        <h1>Webinar</h1>
+        <h1>{heading}</h1>
       </HeaderBox>
-      <BreadCumbBox>
+      {/* <BreadCumbBox>
         <span>Home / Webinar</span>
-      </BreadCumbBox>
+      </BreadCumbBox> */}
     </div>
   );
 };

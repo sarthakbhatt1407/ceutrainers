@@ -39,7 +39,7 @@ const Webinars = () => {
   return (
     <>
       <WebNav />
-      <PagaeHeader />
+      <PagaeHeader heading={"Webinar"} />
       <div
         style={{
           display: "flex",
