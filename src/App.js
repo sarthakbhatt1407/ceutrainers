@@ -38,7 +38,7 @@ const App = () => {
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/webinars" exact element={<Webinars />} />
-        <Route path="/webinars/:id" exact element={<WebinarDetail />} />
+        <Route path="/webinars/:slug/:id" exact element={<WebinarDetail />} />
 
         <Route path="*" exact element={<Error />} />
       </Routes>

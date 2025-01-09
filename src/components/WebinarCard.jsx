@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { Card, Typography, Row, Col, Tag, Button } from "antd";
-import { ClockCircleOutlined, AudioOutlined } from "@ant-design/icons";
+import {
+  ClockCircleOutlined,
+  AudioOutlined,
+  CalendarFilled,
+  CalendarOutlined,
+} from "@ant-design/icons";
 import { CalendarMonthOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 
@@ -14,9 +19,10 @@ const WebinarCard = (props) => {
   return (
     <Card
       onClick={() => {
-        navigate(`/webinars/${webinar.id}`);
+        navigate(`/webinars/${webinar.slug}/${webinar.id}`);
       }}
       style={{
+        cursor: "pointer",
         width: "400px",
         display: "flex",
         flexDirection: "column",
@@ -55,7 +61,7 @@ const WebinarCard = (props) => {
           justify="space-between"
           style={{
             position: "absolute",
-            bottom: hovered ? 12 : -20,
+            bottom: hovered ? 37 : -20,
             left: 0,
             right: 0,
             padding: "8px",
@@ -95,7 +101,7 @@ const WebinarCard = (props) => {
         style={{
           position: "relative",
           transition: "all 0.5s ease",
-          marginTop: hovered ? "-10%" : "0", // Move the content upwards when hovered
+          marginTop: hovered ? "-15%" : "0", // Move the content upwards when hovered
           backgroundColor: "white",
           padding: ".5rem .7rem",
           display: "grid",
@@ -109,7 +115,7 @@ const WebinarCard = (props) => {
             <Title
               level={4}
               style={{
-                fontSize: "22px",
+                fontSize: "20px",
                 fontWeight: "bold",
                 margin: "0",
                 color: "black",
@@ -124,15 +130,13 @@ const WebinarCard = (props) => {
 
         {/* Duration and Speaker */}
         <Row
-          justify="space-between"
-          align="middle"
           style={{
-            width: "90%",
+            width: "100%",
             padding: "0 1rem",
             marginBottom: "1rem",
-            flexDirection: "row",
-            justifyContent: "start",
-            gap: "2rem",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gridGap: ".5rem",
           }}
         >
           <Col
@@ -143,9 +147,8 @@ const WebinarCard = (props) => {
           >
             <Text
               style={{
-                fontSize: "16px",
                 color: "#666",
-                fontSize: "16px",
+                fontSize: "15px",
                 color: "#666",
                 display: "flex",
                 alignItems: "center",
@@ -165,9 +168,9 @@ const WebinarCard = (props) => {
           <Col>
             <Text
               style={{
-                fontSize: "16px",
+                fontSize: "15px",
                 color: "#666",
-                fontSize: "16px",
+
                 color: "#666",
                 display: "flex",
                 alignItems: "center",
@@ -181,33 +184,31 @@ const WebinarCard = (props) => {
                   transform: "scale(1.2)",
                 }}
               />{" "}
-              Margie Faulk
+              {webinar.speaker_name}
             </Text>
           </Col>
         </Row>
         <Row
-          justify="space-between"
-          // align="middle"
           style={{
-            width: "90%",
+            width: "100%",
             padding: "0 1rem",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "start",
-            gap: "2rem",
+            marginBottom: "1rem",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gridGap: ".5rem",
           }}
         >
           <Col style={{}}>
             <Text
               style={{
-                fontSize: "16px",
+                fontSize: "15px",
                 color: "#666",
                 display: "flex",
                 alignItems: "center",
                 gap: "5px",
               }}
             >
-              <CalendarMonthOutlined
+              <CalendarOutlined
                 style={{
                   color: "#9CD161",
                   marginRight: 3,
@@ -220,15 +221,15 @@ const WebinarCard = (props) => {
           <Col>
             <Text
               style={{
-                fontSize: "16px",
+                fontSize: "15px",
                 color: "#666",
-                color: "#666",
+
                 display: "flex",
                 alignItems: "center",
                 gap: "5px",
               }}
             >
-              <AudioOutlined
+              <ClockCircleOutlined
                 style={{
                   color: "#9CD161",
                   marginRight: 3,

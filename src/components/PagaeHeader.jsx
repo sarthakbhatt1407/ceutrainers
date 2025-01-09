@@ -5,7 +5,7 @@ const HeaderBox = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  height: 40vh;
+  height: 35vh;
   font-size: 2rem;
   padding-top: 2rem;
   background-color: #408a78;
@@ -26,7 +26,7 @@ const HeaderBox = styled.div`
     h1 {
       font-size: 2.3rem;
     }
-    height: 35vh;
+    height: 20vh;
   }
 `;
 const BreadCumbBox = styled.div`

@@ -47,10 +47,10 @@ function WebNav({ mode, toggleColorMode }) {
   const w = window.screen.width;
 
   const logoStyle = {
-    width: "10rem",
+    width: w < 901 ? "4rem" : "10rem",
     height: "3.5rem",
     cursor: "pointer",
-    margin: w < 901 ? " 0  4rem 0 1rem" : " 0  4rem 0 2rem",
+    margin: w < 901 ? " 0  11rem 0 0rem" : " 0  4rem 0 2rem",
   };
 
   return (
@@ -74,7 +74,6 @@ function WebNav({ mode, toggleColorMode }) {
             flexShrink: 0,
             borderRadius: "10px",
             maxHeight: 40,
-            fontFamily: "Raleway",
           })}
         >
           <Box
@@ -106,7 +105,7 @@ function WebNav({ mode, toggleColorMode }) {
                   color="text.primary"
                   sx={{
                     position: "relative",
-
+                    fontFamily: "Raleway",
                     color: active === "categories" ? "#519d8a" : "#272727",
                     fontSize: "1.1rem",
                     fontWeight: "550",
@@ -154,7 +153,14 @@ function WebNav({ mode, toggleColorMode }) {
                     setDropdownOpen(false);
                   }}
                 >
-                  Category 1
+                  <Typography
+                    sx={{
+                      fontFamily: "Raleway",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Category 1
+                  </Typography>
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
@@ -163,7 +169,14 @@ function WebNav({ mode, toggleColorMode }) {
                     setDropdownOpen(false);
                   }}
                 >
-                  Category 2
+                  <Typography
+                    sx={{
+                      fontFamily: "Raleway",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Category 2
+                  </Typography>
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
@@ -172,7 +185,14 @@ function WebNav({ mode, toggleColorMode }) {
                     setDropdownOpen(false);
                   }}
                 >
-                  Category 3
+                  <Typography
+                    sx={{
+                      fontFamily: "Raleway",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Category 3
+                  </Typography>
                 </MenuItem>
               </Menu>
               <MenuItem
@@ -194,6 +214,7 @@ function WebNav({ mode, toggleColorMode }) {
                   color="text.primary"
                   sx={{
                     position: "relative",
+                    fontFamily: "Raleway",
                     color: active === "webinars" ? "#519d8a" : "#272727",
                     fontSize: "1.1rem",
                     fontWeight: "550",
@@ -239,6 +260,7 @@ function WebNav({ mode, toggleColorMode }) {
                   color="text.primary"
                   sx={{
                     position: "relative",
+                    fontFamily: "Raleway",
                     color: active === "Contact" ? "#519d8a" : "#272727",
                     fontSize: "1.1rem",
                     fontWeight: "550",
@@ -287,7 +309,7 @@ function WebNav({ mode, toggleColorMode }) {
                   color="text.primary"
                   sx={{
                     position: "relative",
-
+                    fontFamily: "Raleway",
                     color: active === "help" ? "#519d8a" : "#272727",
                     fontSize: "1.1rem",
                     fontWeight: "550",
@@ -334,7 +356,14 @@ function WebNav({ mode, toggleColorMode }) {
                     setDropdownOpen(false);
                   }}
                 >
-                  Get in touch
+                  <Typography
+                    sx={{
+                      fontFamily: "Raleway",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Get in touch
+                  </Typography>
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
@@ -343,7 +372,14 @@ function WebNav({ mode, toggleColorMode }) {
                     setDropdownOpen(false);
                   }}
                 >
-                  FAQ
+                  <Typography
+                    sx={{
+                      fontFamily: "Raleway",
+                      fontWeight: "500",
+                    }}
+                  >
+                    FAQ
+                  </Typography>
                 </MenuItem>
               </Menu>
             </Box>
@@ -371,6 +407,8 @@ function WebNav({ mode, toggleColorMode }) {
                   color: "black",
                   fontWeight: "bolder",
                   fontSize: ".9rem",
+                  fontFamily: "Raleway",
+                  textDecoration: "none",
                 }}
               >
                 Register
@@ -401,36 +439,39 @@ function WebNav({ mode, toggleColorMode }) {
                     flexDirection: "column",
                     alignItems: "end",
                     flexGrow: 1,
+                    fontFamily: "Raleway",
                   }}
                 ></Box>
-                <MenuItem>Overview</MenuItem>
-                <MenuItem>Services</MenuItem>
-                <MenuItem>Start With Us</MenuItem>
-                <MenuItem>Contact Us</MenuItem>
-                <Divider />
-                <MenuItem>
-                  {!isLoggedIn && (
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      component="a"
-                      target="_blank"
-                      sx={{ width: "100%" }}
-                      style={{
-                        backgroundColor: "#ff4800",
-                        letterSpacing: "0.09rem",
-                        color: "white",
-                      }}
-                    >
-                      <Link
-                        to={"/register"}
-                        style={{ textDecoration: "none", color: "white" }}
-                      >
-                        Sign up
-                      </Link>
-                    </Button>
-                  )}
+                <MenuItem
+                  style={{
+                    fontFamily: "Raleway",
+                  }}
+                >
+                  Webinar
                 </MenuItem>
+                <MenuItem
+                  style={{
+                    fontFamily: "Raleway",
+                  }}
+                >
+                  Who we are?
+                </MenuItem>
+                <MenuItem
+                  style={{
+                    fontFamily: "Raleway",
+                  }}
+                >
+                  FAQ
+                </MenuItem>
+                <MenuItem
+                  style={{
+                    fontFamily: "Raleway",
+                  }}
+                >
+                  Get in touch
+                </MenuItem>
+                <Divider />
+
                 <MenuItem>
                   <Button
                     color="primary"
@@ -439,33 +480,22 @@ function WebNav({ mode, toggleColorMode }) {
                     target="_blank"
                     sx={{ width: "100%" }}
                     style={{
-                      backgroundColor: "#ff4800",
+                      backgroundColor: "#9CD161",
                       letterSpacing: "0.09rem",
                       color: "white",
+                      border: "0px",
                     }}
                   >
                     {!isLoggedIn && (
                       <Link
                         to={"/login"}
-                        style={{ textDecoration: "none", color: "white" }}
+                        style={{
+                          textDecoration: "none",
+                          color: "white",
+                          fontFamily: "Raleway",
+                        }}
                       >
-                        Sign in
-                      </Link>
-                    )}
-                    {isLoggedIn && !isAdmin && (
-                      <Link
-                        to={"/user-panel/home"}
-                        style={{ textDecoration: "none", color: "white" }}
-                      >
-                        User Panel
-                      </Link>
-                    )}
-                    {isLoggedIn && isAdmin && (
-                      <Link
-                        to={"/admin"}
-                        style={{ textDecoration: "none", color: "white" }}
-                      >
-                        Admin Panel
+                        Resgister Now
                       </Link>
                     )}
                   </Button>

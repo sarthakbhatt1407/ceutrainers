@@ -51,7 +51,7 @@ const Webinars = () => {
           gap: "1rem",
           marginTop: "2rem",
           position: "relative",
-          height: loading ? "100vh" : "fit-content",
+          height: loading ? "80vh" : "fit-content",
         }}
       >
         {loading && <MusicLoader />}
