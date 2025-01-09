@@ -5,8 +5,18 @@ import WebNav from "../components/Navbars/WebNav";
 import Footer from "../components/Footer";
 import { useParams } from "react-router";
 import MusicLoader from "../components/Loader/MusicLoader";
+import {
+  AlarmOutlined,
+  CalendarMonthOutlined,
+  TimerOutlined,
+} from "@mui/icons-material";
+import { CiClock1 } from "react-icons/ci";
 
 // Styled Components (same as before)
+
+const Outerbox = styled.div`
+  background-color: #f2f6f7;
+`;
 const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
@@ -17,7 +27,8 @@ const TabsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 20px;
-  padding: 1rem 0;
+
+  /* padding: 1rem 0; */
   width: 100%;
 
   @media (max-width: 768px) {
@@ -34,6 +45,7 @@ const TabsContainer = styled.div`
 `;
 
 const Tab = styled.div`
+  background-color: white;
   font-size: 19px;
   padding: 1.2rem 3.5rem;
   cursor: pointer;
@@ -65,17 +77,21 @@ const ContentContainer = styled.div`
 
 const LeftContent = styled.div`
   flex: 3;
-
+  font-family: "Open Sans", sans-serif;
+  margin-right: 1rem;
+  overflow: hidden;
   h3 {
     margin-bottom: 20px;
     font-size: 1.9rem;
   }
 
   p {
+    color: #3b3b4f;
+    font-family: "Open Sans", sans-serif;
+    font-size: 1rem;
+    line-height: 1.875;
     margin-bottom: 10px;
-    line-height: 1.6;
-    color: #555;
-    font-size: 18px;
+    text-align: justify;
   }
   ul {
     li {
@@ -87,6 +103,7 @@ const LeftContent = styled.div`
 `;
 
 const RightContent = styled.div`
+  background-color: white;
   flex: 1.3;
   padding: 30px 20px;
   padding-top: 0;
@@ -94,18 +111,27 @@ const RightContent = styled.div`
   border: 1px solid #ddd;
   border-radius: 8px;
   height: fit-content;
+
   h3 {
-    font-size: 1.7rem;
+    font-size: 1.3rem;
     color: black;
     text-align: center;
+    padding: 0.7rem;
     border-bottom: 2px solid #408a78;
-    padding-bottom: 0.5rem;
+    border-bottom-left-radius: 0.6rem;
+    border-bottom-right-radius: 0.6rem;
     width: fit-content;
     margin: 1rem auto;
+    margin-top: 0;
+    font-family: "Open Sans", sans-serif;
+    background-color: #408a78;
+    color: white;
   }
   h4 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     color: #408a78;
+    font-family: "Open Sans", sans-serif;
+
     margin-bottom: 10px;
   }
 
@@ -119,7 +145,10 @@ const RightContent = styled.div`
       align-items: center;
       margin-bottom: 10px;
       gap: 1rem;
-
+      font-family: "Open Sans", sans-serif;
+      font-size: 1.2rem;
+      border-bottom: 1px solid #9a9a9a;
+      padding-bottom: 15px;
       label {
         display: flex;
         align-items: center;
@@ -154,13 +183,53 @@ const RightContent = styled.div`
     color: white;
     border: none;
     padding: 10px 20px;
-    width: 100%;
+    width: 60%;
     border-radius: 8px;
     font-size: 14px;
     cursor: pointer;
-    font-size: 1.5rem;
-    font-weight: 500;
+    font-size: 1.2rem;
+    font-weight: 550;
     font-family: "Raleway";
+    display: block;
+    margin: auto;
+  }
+`;
+const HeaderBox = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 57vh;
+  font-size: 1rem;
+  padding-top: 2rem;
+  background-color: #408a78;
+  color: white;
+  gap: 0.7rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  h1 {
+    margin: 0;
+    width: 70%;
+    font-weight: 800;
+  }
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+  span {
+    font-size: 0.7rem;
+    color: #ffffffbc;
+  }
+
+  @media only screen and (min-width: 0px) and (max-width: 900px) {
+    h1 {
+      font-size: 1.7rem;
+      width: 90%;
+    }
+    height: 70vh;
+    div {
+      width: 90%;
+    }
   }
 `;
 
@@ -171,7 +240,57 @@ const WebinarDetail = () => {
 
   const [selectedTab, setSelectedTab] = useState("Description");
   const [sellingOpt, setSellingOpt] = useState([]);
+  const [times, setTimes] = useState("");
+  const convertESTtoTimeZones = (estTime) => {
+    // Parse the EST time as a Date object (assuming EST input is in HH:mm:ss format)
+    const [hours, minutes, seconds] = estTime.split(":").map(Number);
+    const estDate = new Date();
+    estDate.setUTCHours(hours + 5, minutes, seconds, 0); // Convert EST to UTC
 
+    // Formatting options to get 24-hour format
+    const timeFormatOptions = {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false, // 24-hour format
+    };
+
+    // Format times in all required timezones in 24-hour format
+    const estTime24 = estDate.toLocaleTimeString("en-US", {
+      ...timeFormatOptions,
+      timeZone: "America/New_York",
+    });
+
+    const cstTime24 = estDate.toLocaleTimeString("en-US", {
+      ...timeFormatOptions,
+      timeZone: "America/Chicago",
+    });
+
+    const mstTime24 = estDate.toLocaleTimeString("en-US", {
+      ...timeFormatOptions,
+      timeZone: "America/Denver",
+    });
+
+    const pstTime24 = estDate.toLocaleTimeString("en-US", {
+      ...timeFormatOptions,
+      timeZone: "America/Los_Angeles",
+    });
+
+    // Function to add AM/PM to 24-hour time
+    const addAMPM = (time24) => {
+      const [hour, minute, second] = time24.split(":");
+      const period = hour >= 12 ? "PM" : "AM";
+      return `${time24} ${period}`;
+    };
+
+    // Return the times in 24-hour format with AM/PM
+    return {
+      EST: addAMPM(estTime24),
+      CST: addAMPM(cstTime24),
+      MST: addAMPM(mstTime24),
+      PST: addAMPM(pstTime24),
+    };
+  };
   // Selected options state
   const [selectedOptions, setSelectedOptions] = useState({
     Live: null,
@@ -254,6 +373,10 @@ const WebinarDetail = () => {
           setLoading(false); // Stop loading
           setCourseData(data[0]);
           setSellingOpt(JSON.parse(data[0]["selling_option"]));
+          const resTime = convertESTtoTimeZones(data[0]["time"]);
+          console.log(resTime);
+
+          setTimes(resTime);
         }
       } catch (error) {
         console.error("Error fetching course details:", error);
@@ -269,129 +392,219 @@ const WebinarDetail = () => {
   return (
     <>
       <WebNav />
+      <Outerbox>
+        {loading && (
+          <div
+            style={{
+              height: "80vh",
+              position: "relative",
+            }}
+          >
+            <MusicLoader />
+          </div>
+        )}
 
-      {loading && (
-        <div
-          style={{
-            height: "80vh",
-            position: "relative",
-          }}
-        >
-          <MusicLoader />
-        </div>
-      )}
+        {!loading && (
+          <>
+            <HeaderBox>
+              <h1>{courseData.title}</h1>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-evenly",
+                  alignItems: "center",
 
-      {!loading && (
-        <>
-          <PagaeHeader heading={"Webinar"} />
-          <Container>
-            {/* Tabs */}
-            <TabsContainer>
-              {["Description", "Speaker", "Credits", "FAQs"].map(
-                (tab, index) => (
-                  <Tab
-                    key={index}
-                    active={selectedTab === tab}
-                    onClick={() => setSelectedTab(tab)}
-                    first={index === 0}
-                    last={index === 3}
-                  >
-                    {tab}
-                  </Tab>
-                )
-              )}
-            </TabsContainer>
+                  padding: ".5rem",
+                  fontSize: "1.1rem",
+                  gap: "2rem",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    gap: ".3rem",
+                    alignItems: "center",
+                  }}
+                >
+                  <CalendarMonthOutlined />
+                  {courseData.date}
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: ".3rem",
+                    alignItems: "center",
+                    fontSize: "1.1rem",
+                  }}
+                >
+                  <TimerOutlined />
+                  {courseData.duration} minutes
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
 
-            <ContentContainer>
-              <LeftContent>
-                {selectedTab === "Description" && (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: courseData.description,
-                    }}
-                  />
-                )}
-                {selectedTab === "Speaker" && (
-                  <>
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "1rem",
-                        alignItems: "center",
-                      }}
-                    >
-                      <img
-                        src={`https://ceuservices.com/ceuadmin/assets/images/speaker/${courseData.images}`}
-                        alt=""
-                        style={{
-                          width: "8rem",
-                          height: "8rem",
-                          borderRadius: ".5rem",
-                        }}
-                      />
-                      <div>
-                        <h3>{courseData.speaker_name}</h3>
-                        <p>{courseData.designation}</p>
-                      </div>
-                    </div>
+                  // width: "40%",
+                  padding: ".5rem",
+                  gap: "2rem",
+                  fontSize: "1.1rem",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    gap: ".3rem",
+                    alignItems: "center",
+                  }}
+                >
+                  <AlarmOutlined />
+                  {courseData["time"]} (EST) | {"  "} {times["CST"]} (CST) |{" "}
+                  {times["MST"]} (MST) |{"  "} {times["PST"]} (PST)
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "1rem",
+                }}
+              >
+                <img
+                  src={`https://ceuservices.com/ceuadmin/assets/images/speaker/${courseData.images}`}
+                  alt=""
+                  style={{
+                    width: "4rem",
+                    height: "4rem",
+                    borderRadius: "50%",
+                  }}
+                />
+
+                <h3
+                  style={{
+                    fontSize: "1.2rem",
+                  }}
+                >
+                  {courseData.speaker_name}
+                </h3>
+              </div>
+            </HeaderBox>
+            <Container>
+              {/* Tabs */}
+
+              <ContentContainer>
+                <LeftContent>
+                  <TabsContainer>
+                    {["Description", "Speaker", "Credits", "FAQs"].map(
+                      (tab, index) => (
+                        <Tab
+                          key={index}
+                          active={selectedTab === tab}
+                          onClick={() => setSelectedTab(tab)}
+                          first={index === 0}
+                          last={index === 3}
+                        >
+                          {tab}
+                        </Tab>
+                      )
+                    )}
+                  </TabsContainer>
+                  {selectedTab === "Description" && (
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: courseData.speaker_bio,
+                        __html: courseData.description,
                       }}
                     />
-                  </>
-                )}
-                {selectedTab === "Credits" && (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: courseData.certificate,
-                    }}
-                  />
-                )}
-                {selectedTab === "FAQs" && <div>FAQs Content</div>}
-              </LeftContent>
+                  )}
+                  {selectedTab === "Speaker" && (
+                    <>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "1rem",
+                          alignItems: "center",
+                        }}
+                      >
+                        <img
+                          src={`https://ceuservices.com/ceuadmin/assets/images/speaker/${courseData.images}`}
+                          alt=""
+                          style={{
+                            width: "8rem",
+                            height: "8rem",
+                            borderRadius: ".5rem",
+                          }}
+                        />
+                        <div>
+                          <h3>{courseData.speaker_name}</h3>
+                          <p>{courseData.designation}</p>
+                        </div>
+                      </div>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: courseData.speaker_bio,
+                        }}
+                      />
+                    </>
+                  )}
+                  {selectedTab === "Credits" && (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: courseData.certificate,
+                      }}
+                    />
+                  )}
+                  {selectedTab === "FAQs" && <div>FAQs Content</div>}
+                </LeftContent>
 
-              <RightContent>
-                <h3>Registration options</h3>
-                {sellingOpt &&
-                  Object.keys(sellingOpt).map((category, index) => (
-                    <div className="section" key={index}>
-                      <h4>{category}</h4>
-                      <ul>
-                        {Object.entries(sellingOpt[category]).map(
-                          ([label, price], index) => (
-                            <li key={index}>
-                              <label>
-                                <input
-                                  type="checkbox"
-                                  name={category}
-                                  checked={
-                                    selectedOptions[category]?.label === label
-                                  }
-                                  onChange={() =>
-                                    handleOptionChange(category, {
-                                      label,
-                                      price: parseFloat(price),
-                                    })
-                                  }
-                                />
-                                {label}
-                              </label>
-                              <span>${price}</span>
-                            </li>
-                          )
-                        )}
-                      </ul>
-                    </div>
-                  ))}
+                <RightContent>
+                  <h3>Registration options</h3>
+                  {sellingOpt &&
+                    Object.keys(sellingOpt).map((category, index) => (
+                      <div className="section" key={index}>
+                        <h4>{category}</h4>
+                        {/* <hr /> */}
+                        <ul>
+                          {Object.entries(sellingOpt[category]).map(
+                            ([label, price], index) => (
+                              <li key={index}>
+                                <label>
+                                  <input
+                                    type="checkbox"
+                                    name={category}
+                                    checked={
+                                      selectedOptions[category]?.label === label
+                                    }
+                                    onChange={() =>
+                                      handleOptionChange(category, {
+                                        label,
+                                        price: parseFloat(price),
+                                      })
+                                    }
+                                  />
+                                  {label}
+                                </label>
+                                <span>${price}</span>
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+                    ))}
 
-                <div className="total-fee">Total Fee: ${totalFee}</div>
-                <button onClick={handleAddToCart}>Add To Cart</button>
-              </RightContent>
-            </ContentContainer>
-          </Container>
-        </>
-      )}
+                  <div className="total-fee">
+                    Total Fee: $ {"  "}
+                    {totalFee}
+                  </div>
+                  <button onClick={handleAddToCart}>Add To Cart</button>
+                </RightContent>
+              </ContentContainer>
+            </Container>
+          </>
+        )}
+      </Outerbox>
       <Footer />
     </>
   );

@@ -39,7 +39,7 @@ const Webinars = () => {
   return (
     <>
       <WebNav />
-      <PagaeHeader heading={"Webinar"} />
+      <PagaeHeader heading={"Webinars"} />
       <div
         style={{
           display: "flex",
@@ -52,6 +52,7 @@ const Webinars = () => {
           marginTop: "2rem",
           position: "relative",
           height: loading ? "80vh" : "fit-content",
+          fontFamily: "Raleway",
         }}
       >
         {loading && <MusicLoader />}

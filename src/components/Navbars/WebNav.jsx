@@ -229,7 +229,7 @@ function WebNav({ mode, toggleColorMode }) {
                     },
                   }}
                 >
-                  Webinar
+                  Webinars
                   <span
                     style={{
                       position: "absolute",
