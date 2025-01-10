@@ -163,7 +163,7 @@ const CourseTitle = styled.h3`
   margin-bottom: 5px;
   padding-left: 1.5rem;
   margin-top: 1.5rem;
-
+  padding-right: 1.5rem;
   @media (max-width: 768px) {
     font-size: 16px;
   }
