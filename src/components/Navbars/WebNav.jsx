@@ -48,10 +48,10 @@ function WebNav({ mode, toggleColorMode }) {
   const w = window.screen.width;
 
   const logoStyle = {
-    width: w < 901 ? "4rem" : "10rem",
-    height: "3.5rem",
+    width: w < 901 ? "100%" : "9rem",
+    height: w < 901 ? "2rem" : "3rem",
     cursor: "pointer",
-    margin: w < 901 ? " 0 15rem 0 -2.5rem" : " 0  4rem 0 2rem",
+    margin: w < 901 ? " 0 18rem 0 -2.2rem" : " 0  4rem 0 2rem",
   };
 
   return (
@@ -88,7 +88,11 @@ function WebNav({ mode, toggleColorMode }) {
               marginRight: "3rem",
             }}
           >
-            <img src={logo} style={logoStyle} alt="logo of sitemark" />
+            <img
+              src="https://ceuservices.com/assets/img/Logo.png"
+              style={logoStyle}
+              alt="logo of sitemark"
+            />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <MenuItem
                 onClick={handleMenuClick} // Open dropdown
