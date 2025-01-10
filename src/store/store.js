@@ -35,8 +35,6 @@ const storeReducer = (state = defaultState, action) => {
   }
 
   if (action.type === "reload") {
-    console.log(action.data);
-
     return {
       ...action.data,
     };

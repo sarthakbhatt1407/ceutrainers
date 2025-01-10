@@ -127,11 +127,12 @@ const RightContent = styled.div`
     font-family: "Open Sans", sans-serif;
     background-color: #408a78;
     color: white;
+    font-family: "Raleway";
   }
   h4 {
     font-size: 1.4rem;
     color: #408a78;
-    font-family: "Open Sans", sans-serif;
+    font-family: "Raleway";
 
     margin-bottom: 10px;
   }
@@ -146,7 +147,7 @@ const RightContent = styled.div`
       align-items: center;
       margin-bottom: 10px;
       gap: 1rem;
-      font-family: "Open Sans", sans-serif;
+      font-family: "Raleway";
       font-size: 1.2rem;
       border-bottom: 1px solid #9a9a9a;
       padding-bottom: 15px;
@@ -156,15 +157,18 @@ const RightContent = styled.div`
         gap: 10px;
         font-size: 15px;
         font-weight: 450;
+        font-family: "Raleway";
       }
 
       input {
         accent-color: #20c997;
         transform: scale(1.3);
+        font-family: "Raleway";
       }
 
       span {
         font-size: 14px;
+        font-family: "Raleway";
         color: #555;
       }
     }
@@ -172,6 +176,7 @@ const RightContent = styled.div`
 
   .total-fee {
     margin-top: 20px;
+    font-family: "Raleway";
     margin-bottom: 20px;
     font-size: 1.2rem;
     font-weight: bold;
@@ -180,7 +185,7 @@ const RightContent = styled.div`
   }
 
   button {
-    background: #20c997;
+    background-color: #3f8978;
     color: white;
     border: none;
     padding: 10px 20px;

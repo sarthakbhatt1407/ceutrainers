@@ -9,6 +9,7 @@ import Webinars from "./pages/Webinars";
 import WebinarDetail from "./pages/WebinarDetail";
 import Error from "./pages/Error";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -42,6 +43,7 @@ const App = () => {
 
         <Route path="/webinars/:slug/:id" exact element={<WebinarDetail />} />
         <Route path="/cart" exact element={<Cart />} />
+        <Route path="/checkout" exact element={<Checkout />} />
         <Route path="*" exact element={<Error />} />
       </Routes>
     </div>

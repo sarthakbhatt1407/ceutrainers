@@ -22,7 +22,7 @@ const Cart = () => {
       <PagaeHeader heading={"Cart"} />
       <PageWrapper>
         <Card>
-          <Title>Your Reservation</Title>
+          <Title>Your Cart</Title>
           {cartItems.length === 0 ? (
             <EmptyCartMessage>Cart is Empty</EmptyCartMessage>
           ) : (
@@ -85,7 +85,13 @@ const Cart = () => {
                 >
                   Add More
                 </ButtonAddMore>
-                <ButtonNext>Next</ButtonNext>
+                <ButtonNext
+                  onClick={() => {
+                    navigate("/checkout");
+                  }}
+                >
+                  Next
+                </ButtonNext>
               </Actions>
             </>
           )}
@@ -105,6 +111,10 @@ const PageWrapper = styled.div`
   height: fit-content;
   padding: 4rem 0;
   background: #f2f6f7;
+  background-image: url(https://themes.getmotopress.com/edme/wp-content/uploads/sites/38/2020/11/appointment_bg.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 `;
 
 const Card = styled.div`

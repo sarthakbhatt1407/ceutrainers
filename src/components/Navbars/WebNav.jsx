@@ -51,7 +51,7 @@ function WebNav({ mode, toggleColorMode }) {
     width: w < 901 ? "4rem" : "10rem",
     height: "3.5rem",
     cursor: "pointer",
-    margin: w < 901 ? " 0  11rem 0 0rem" : " 0  4rem 0 2rem",
+    margin: w < 901 ? " 0 15rem 0 -2.5rem" : " 0  4rem 0 2rem",
   };
 
   return (
