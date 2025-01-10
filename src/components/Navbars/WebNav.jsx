@@ -8,17 +8,18 @@ import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import Drawer from "@mui/material/Drawer";
-import { Menu } from "@mui/material"; // Import for dropdown
+import { Badge, Menu } from "@mui/material"; // Import for dropdown
 import logo from "../../assets/icons/logo.svg";
-import { Reorder } from "@mui/icons-material";
+import { Reorder, ShoppingCartOutlined } from "@mui/icons-material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
+import { IoCartOutline } from "react-icons/io5";
 
 function WebNav({ mode, toggleColorMode }) {
   const navigate = useNavigate();
   const path = useLocation().pathname;
-
+  const cart = useSelector((state) => state.cart);
   const isAdmin = useSelector((state) => state.isAdmin);
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const [open, setOpen] = React.useState(false);
@@ -382,8 +383,45 @@ function WebNav({ mode, toggleColorMode }) {
                   </Typography>
                 </MenuItem>
               </Menu>
+              <MenuItem
+                onClick={() => navigate("/cart")}
+                sx={{
+                  py: "6px",
+                  px: "24px",
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                    color: "#519d8a",
+                  },
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  color="text.primary"
+                  sx={{
+                    position: "relative",
+                    fontFamily: "Raleway",
+                    color: "#3F8978",
+
+                    fontSize: "1.1rem",
+
+                    marginRight: "0.1rem",
+                    textTransform: "capitalize",
+                    transition: "all .5s",
+                    // transform: "scale(1.5)",
+                    letterSpacing: "0.06rem",
+                    "&:hover": {
+                      color: "#519d8a",
+                    },
+                  }}
+                >
+                  <Badge badgeContent={cart.length} color="primary">
+                    <ShoppingCartOutlined color="#3F8978" />
+                  </Badge>
+                </Typography>
+              </MenuItem>
             </Box>
           </Box>
+
           <Box
             sx={{
               display: { xs: "none", md: "flex" },

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PagaeHeader from "../components/PagaeHeader";
 import WebNav from "../components/Navbars/WebNav";
 import Footer from "../components/Footer";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import MusicLoader from "../components/Loader/MusicLoader";
 import {
   AlarmOutlined,
@@ -11,6 +11,7 @@ import {
   TimerOutlined,
 } from "@mui/icons-material";
 import { CiClock1 } from "react-icons/ci";
+import { useDispatch } from "react-redux";
 
 // Styled Components (same as before)
 
@@ -211,6 +212,7 @@ const HeaderBox = styled.div`
     margin: 0;
     width: 70%;
     font-weight: 800;
+    font-size: 2.5rem;
   }
   p {
     margin: 0;
@@ -234,10 +236,11 @@ const HeaderBox = styled.div`
 `;
 
 const WebinarDetail = () => {
+  const navigate = useNavigate();
   const id = useParams().id;
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const dispatch = useDispatch();
   const [selectedTab, setSelectedTab] = useState("Description");
   const [sellingOpt, setSellingOpt] = useState([]);
   const [times, setTimes] = useState("");
@@ -336,9 +339,16 @@ const WebinarDetail = () => {
         category,
         option: option.label,
         price: option.price,
+        courseId: courseData.id,
+        title: courseData.title,
+        time: courseData.time,
+        date: courseData.date,
+        speaker: courseData.speaker_name,
+        slug: courseData.slug,
       }));
 
-    console.log("Selected items:", selectedItems);
+    dispatch({ type: "add to cart", data: selectedItems[0] });
+    navigate("/cart");
   };
 
   useEffect(() => {
@@ -366,6 +376,7 @@ const WebinarDetail = () => {
         }
 
         const data = await response.json();
+        console.log(data);
 
         if (data.error) {
           console.error("Error:", data.error);
@@ -374,7 +385,6 @@ const WebinarDetail = () => {
           setCourseData(data[0]);
           setSellingOpt(JSON.parse(data[0]["selling_option"]));
           const resTime = convertESTtoTimeZones(data[0]["time"]);
-          console.log(resTime);
 
           setTimes(resTime);
         }
@@ -465,7 +475,7 @@ const WebinarDetail = () => {
                   {times["MST"]} (MST) |{"  "} {times["PST"]} (PST)
                 </div>
               </div>
-              <div
+              {/* <div
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -490,7 +500,7 @@ const WebinarDetail = () => {
                 >
                   {courseData.speaker_name}
                 </h3>
-              </div>
+              </div> */}
             </HeaderBox>
             <Container>
               {/* Tabs */}

@@ -65,7 +65,7 @@ const WebinarCard = (props) => {
   // Example usage:
   const estTime = "13:00:00"; // EST input time
   const timeZones = convertESTtoTimeZones(estTime);
-  console.log(timeZones);
+
   const webinar = props.webinar;
   const navigate = useNavigate();
   const [hovered, setHovered] = useState(false);

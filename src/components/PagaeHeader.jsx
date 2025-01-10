@@ -6,7 +6,7 @@ const HeaderBox = styled.div`
   flex-direction: column;
   align-items: center;
   height: 35vh;
-  font-size: 1rem;
+  font-size: 1.6rem;
   padding-top: 2rem;
   background-color: #408a78;
   color: white;

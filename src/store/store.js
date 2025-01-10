@@ -5,7 +5,7 @@ const defaultState = {
   isLoggedIn: false,
   userId: "",
   isAdmin: false,
-  labelName: "",
+
   cart: [], // Add cart to the state
 };
 
@@ -19,8 +19,6 @@ const storeReducer = (state = defaultState, action) => {
       ...state,
       isLoggedIn: true,
       userId: user.id,
-      labelName: user.name,
-      isAdmin: user.isAdmin,
     };
 
     localStorage.setItem("state", JSON.stringify(obj));
@@ -28,8 +26,6 @@ const storeReducer = (state = defaultState, action) => {
       ...state,
       isLoggedIn: true,
       userId: user.id,
-      labelName: user.name,
-      isAdmin: user.isAdmin,
     };
   }
 
@@ -39,15 +35,58 @@ const storeReducer = (state = defaultState, action) => {
   }
 
   if (action.type === "reload") {
+    console.log(action.data);
+
     return {
       ...action.data,
     };
   }
 
   if (action.type === "add to cart") {
+    const item = action.data;
+    const cartItems = state.cart;
+
+    const itemFound = cartItems.find((i) => {
+      return i.courseId == item.courseId;
+    });
+    let updatedCart = state.cart;
+    if (itemFound) {
+      const itemIndex = cartItems.findIndex((i) => {
+        return i.courseId == item.courseId;
+      });
+      updatedCart[itemIndex] = item;
+    } else {
+      updatedCart.push(item);
+    }
+
+    const obj = {
+      ...state,
+      cart: updatedCart,
+    };
+
+    localStorage.setItem("state", JSON.stringify(obj));
     return {
       ...state,
-      cart: [...state.cart, action.data], // Add the selected item to cart
+      cart: updatedCart,
+    };
+  }
+  if (action.type === "removefromcart") {
+    const item = action.data;
+    const cartItems = state.cart;
+
+    let updatedCart = cartItems.filter((i) => {
+      return i.courseId != item.courseId;
+    });
+
+    const obj = {
+      ...state,
+      cart: updatedCart,
+    };
+
+    localStorage.setItem("state", JSON.stringify(obj));
+    return {
+      ...state,
+      cart: updatedCart,
     };
   }
 

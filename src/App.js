@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Webinars from "./pages/Webinars";
 import WebinarDetail from "./pages/WebinarDetail";
 import Error from "./pages/Error";
+import Cart from "./pages/Cart";
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -38,8 +39,9 @@ const App = () => {
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/webinars" exact element={<Webinars />} />
-        <Route path="/webinars/:slug/:id" exact element={<WebinarDetail />} />
 
+        <Route path="/webinars/:slug/:id" exact element={<WebinarDetail />} />
+        <Route path="/cart" exact element={<Cart />} />
         <Route path="*" exact element={<Error />} />
       </Routes>
     </div>
