@@ -15,50 +15,45 @@ const WebinarCard = (props) => {
   const [times, setTimes] = useState("");
   const convertESTtoTimeZones = (estTime) => {
     // Parse the EST time as a Date object (assuming EST input is in HH:mm:ss format)
-    const [hours] = estTime.split(":").map(Number); // Get only the hours from the input time
+    const [hours, minutes, seconds] = estTime.split(":").map(Number);
     const estDate = new Date();
-    estDate.setUTCHours(hours + 5, 0, 0, 0); // Convert EST to UTC, only using hours
+    estDate.setUTCHours(hours + 5, minutes || 0, seconds || 0, 0); // Convert EST to UTC
 
-    // Formatting options to get 24-hour format with only hours
+    // Formatting options for 12-hour format with AM/PM
     const timeFormatOptions = {
       hour: "2-digit",
-      hour12: false, // 24-hour format
+      // minute: "2-digit",
+      // second: "2-digit",
+      hour12: true, // 12-hour format
     };
 
-    // Format times in all required timezones in 24-hour format (with only hours)
-    const estTime24 = estDate.toLocaleTimeString("en-US", {
+    // Format times in all required time zones in 12-hour format
+    const estTime12 = estDate.toLocaleTimeString("en-US", {
       ...timeFormatOptions,
       timeZone: "America/New_York",
     });
 
-    const cstTime24 = estDate.toLocaleTimeString("en-US", {
+    const cstTime12 = estDate.toLocaleTimeString("en-US", {
       ...timeFormatOptions,
       timeZone: "America/Chicago",
     });
 
-    const mstTime24 = estDate.toLocaleTimeString("en-US", {
+    const mstTime12 = estDate.toLocaleTimeString("en-US", {
       ...timeFormatOptions,
       timeZone: "America/Denver",
     });
 
-    const pstTime24 = estDate.toLocaleTimeString("en-US", {
+    const pstTime12 = estDate.toLocaleTimeString("en-US", {
       ...timeFormatOptions,
       timeZone: "America/Los_Angeles",
     });
 
-    // Function to add AM/PM to 24-hour time
-    const addAMPM = (time24) => {
-      const [hour] = time24.split(":");
-      const period = hour >= 12 ? "PM" : "AM";
-      return `${time24} ${period}`;
-    };
-
-    // Return the times with only hours in 24-hour format with AM/PM
+    // Return the times in 12-hour format with AM/PM
     return {
-      EST: addAMPM(estTime24),
-      CST: addAMPM(cstTime24),
-      MST: addAMPM(mstTime24),
-      PST: addAMPM(pstTime24),
+      EST: estTime12,
+      CST: cstTime12,
+      MST: mstTime12,
+      PST: pstTime12,
     };
   };
 
@@ -289,8 +284,8 @@ const WebinarCard = (props) => {
                   transform: "scale(1.2)",
                 }}
               />
-              {times["EST"]} (EST) | {"  "} {times["CST"]} (CST) |{"  "}{" "}
-              {times["PST"]} (PST)
+              {times["EST"]} EST | {"  "} {times["CST"]} CST |{"  "}{" "}
+              {times["PST"]} PST
             </Text>
           </Col>
         </Row>

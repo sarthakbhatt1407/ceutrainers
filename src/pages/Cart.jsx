@@ -150,7 +150,7 @@ const ReservationDetails = styled.div`
   border: 1px solid #e4e4e4;
   margin-left: 1.5rem;
   margin-right: 1.5rem;
-
+  border-radius: 10px;
   @media (max-width: 768px) {
     margin-left: 1rem;
     margin-right: 1rem;

@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Footer from "../components/Footer";
 import { Divider, message } from "antd";
+import MusicLoader from "../components/Loader/MusicLoader";
 
 const Checkout = () => {
+  const [couponLoading, setCouponLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [discount, setDiscount] = useState(0);
   const success = (msg) => {
@@ -23,6 +25,10 @@ const Checkout = () => {
     });
   };
   const cartItems = useSelector((state) => state.cart);
+
+  const [attendees, setAttendees] = useState(null);
+  const [checked, setChecked] = useState(false);
+
   const [formValues, setFormValues] = useState({
     firstName: "",
     lastName: "",
@@ -45,13 +51,87 @@ const Checkout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    let obj;
+    if (cartItems.length > 0) {
+      // Extract the numeric value from the option string
+      const extractedValue = cartItems[0]["option"].split(" ")[0];
 
-  const handleApplyCoupon = () => {
-    setAppliedCoupon(couponCode); // Store the applied coupon
-    setIsCouponApplied(true); // Mark coupon as applied
-    success(`Coupon code ${couponCode} applied!`);
-    setDiscount(20);
+      // Check if the extracted value is a valid number
+      if (!isNaN(extractedValue)) {
+        console.log(extractedValue);
+
+        // Convert the extracted value into an array of numbers
+        const attendeeCount = parseInt(extractedValue, 10); // Convert to a number
+
+        // Create an array of numbers (e.g., [1, 2, 3, ..., attendeeCount])
+        const attendeesArray = Array.from(
+          { length: attendeeCount },
+          (_, index) => index + 1
+        );
+
+        setAttendees(attendeesArray); // Set attendees as an array of numbers
+        const numberOfPeople = parseInt(extractedValue, 10);
+
+        const attendeesObj = {};
+        for (let i = 1; i <= numberOfPeople; i++) {
+          attendeesObj[`attendee${i}Email`] = "";
+          attendeesObj[`attendee${i}Name`] = "";
+
+          attendeesObj[`attendee${i}Phone`] = "";
+          attendeesObj[`attendee${i}JobTitle`] = "";
+        }
+        obj = { ...formValues, ...attendeesObj };
+        setFormValues(obj);
+        console.log(obj);
+      }
+    }
+  }, [cartItems]);
+
+  const handleApplyCoupon = async () => {
+    setCouponLoading(true);
+    try {
+      const response = await fetch(
+        "https://ceuservices.com/api/sales_promotion_coupon.php",
+        {
+          method: "POST", // Use POST to send data
+          headers: {
+            "Content-Type": "application/json", // Inform the server that the body contains JSON data
+          },
+          body: JSON.stringify({
+            coupon_code: couponCode, // Send the coupon code in the body
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.length > 0) {
+          // Assume the discount is in the response data
+          setDiscount(data[0].discount); // Set discount from the response
+          setAppliedCoupon(couponCode); // Store the applied coupon
+          setIsCouponApplied(true); // Mark coupon as applied
+          success(`Coupon code ${couponCode} applied!`);
+        } else {
+          // Coupon not found or invalid
+          setIsCouponApplied(false);
+          setDiscount(0);
+          error("Invalid coupon code. Please try again.");
+        }
+      } else {
+        // Handle HTTP errors
+        setIsCouponApplied(false);
+        setDiscount(0);
+        error("Failed to validate coupon. Please try again later.");
+      }
+    } catch (err) {
+      // Handle network or other errors
+      setIsCouponApplied(false);
+      setDiscount(0);
+      error("An error occurred. Please try again later.");
+      console.error(err);
+    }
+    setCouponLoading(false);
   };
 
   const handleRemoveCoupon = () => {
@@ -101,6 +181,7 @@ const Checkout = () => {
     let errors = {};
     let isValid = true;
 
+    // Validate general form fields
     Object.keys(formValues).forEach((field) => {
       const value = formValues[field];
       if (!value) {
@@ -108,15 +189,17 @@ const Checkout = () => {
         isValid = false;
       }
 
-      if (field === "email" && value && !/\S+@\S+\.\S+/.test(value)) {
+      // Email validation
+      if (field.includes("Email") && value && !/\S+@\S+\.\S+/.test(value)) {
         errors[field] = "Please enter a valid email address";
         isValid = false;
       }
     });
 
     if (!isValid) {
+      console.log(formValues);
       setFormErrors(errors);
-      error("Please fill in all required fields correctly.");
+      alert("Please fill in all required fields correctly.");
     } else {
       console.log(formValues);
 
@@ -144,8 +227,8 @@ const Checkout = () => {
       <PageWrapper>
         <ContentWrapper>
           <FormCard>
-            <Title>Checkout</Title>
-            <Divider />
+            <Title>Checkout</Title> <Divider />
+            <Title>Billing Information</Title>
             <Form onSubmit={handleFormSubmit}>
               <InputRow>
                 <InputGroup>
@@ -238,22 +321,38 @@ const Checkout = () => {
                 </InputGroup>
               </InputRow>
 
-              <InputGroup>
-                <Label>
-                  Country <Required>*</Required>
-                </Label>
-                <Select
-                  name="country"
-                  value={formValues.country}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select a Country</option>
-                  <option value="USA">USA</option>
-                  <option value="Canada">Canada</option>
-                  <option value="UK">UK</option>
-                </Select>
-              </InputGroup>
+              <InputRow>
+                <InputGroup>
+                  <Label>
+                    Country <Required>*</Required>
+                  </Label>
+                  <Select
+                    name="country"
+                    value={formValues.country}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select a Country</option>
+                    <option value="USA">USA</option>
+                    <option value="Canada">Canada</option>
+                    <option value="UK">UK</option>
+                  </Select>
+                  {formErrors.country && <Error>{formErrors.country}</Error>}
+                </InputGroup>
+                <InputGroup>
+                  <Label>
+                    Zip Code <Required>*</Required>
+                  </Label>
+                  <Input
+                    type="text"
+                    name="zip"
+                    value={formValues.zip}
+                    onChange={handleChange}
+                    required
+                  />
+                  {formErrors.zip && <Error>{formErrors.zip}</Error>}
+                </InputGroup>
+              </InputRow>
 
               <InputRow>
                 <InputGroup>
@@ -308,19 +407,26 @@ const Checkout = () => {
                 />
               </InputGroup>
 
-              <InputGroup>
-                <Label>
-                  Zip Code <Required>*</Required>
-                </Label>
-                <Input
-                  type="text"
-                  name="zip"
-                  value={formValues.zip}
-                  onChange={handleChange}
-                  required
-                />
-                {formErrors.zip && <Error>{formErrors.zip}</Error>}
-              </InputGroup>
+              {attendees && attendees.length < 2 && (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "start",
+                    gap: "1rem",
+                    alignItems: "center",
+                  }}
+                >
+                  <Label>Attendee same as upper person</Label>
+                  <input
+                    type="checkbox"
+                    onChange={(e) => {
+                      const isChecked = e.target.checked; // Get the checked state
+                      console.log(isChecked);
+                      setChecked(isChecked);
+                    }}
+                  />
+                </div>
+              )}
             </Form>
           </FormCard>
 
@@ -344,6 +450,8 @@ const Checkout = () => {
 
             {/* Coupon code */}
             <CouponSection>
+              {" "}
+              {couponLoading && <MusicLoader />}
               {!isCouponApplied ? (
                 <>
                   <Label>Apply Coupon</Label>
@@ -455,6 +563,96 @@ const Checkout = () => {
           </CartHighlight>
         </ContentWrapper>
       </PageWrapper>
+      <PageWrapper2>
+        <ContentWrapper2>
+          {!checked &&
+            cartItems.length < 2 &&
+            attendees &&
+            attendees.map((i, ind) => {
+              const name = `attendee${ind + 1}Name`;
+              const email = `attendee${ind + 1}Email`;
+              const phone = `attendee${ind + 1}Phone`;
+              const jobTitle = `attendee${ind + 1}JobTitle`;
+              return (
+                <FormCard2>
+                  {" "}
+                  <div
+                    style={{
+                      padding: ".5rem",
+                      margin: "1rem 0 ",
+                      borderRadius: ".5rem",
+                    }}
+                  >
+                    <Title>Attendee {ind + 1}</Title>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "1rem",
+                      }}
+                    >
+                      <InputGroup>
+                        <Label>
+                          Name<Required>*</Required>
+                        </Label>
+                        <Input
+                          type="text"
+                          name={`attendee${ind + 1}Name`}
+                          onChange={handleChange}
+                          required
+                        />
+                        {formErrors[name] && <Error>{formErrors[name]}</Error>}
+                      </InputGroup>
+
+                      <InputGroup>
+                        <Label>
+                          Email<Required>*</Required>
+                        </Label>
+                        <Input
+                          type="text"
+                          name={`attendee${ind + 1}Email`}
+                          onChange={handleChange}
+                          required
+                        />
+                        {formErrors[email] && (
+                          <Error>{formErrors[email]}</Error>
+                        )}
+                      </InputGroup>
+                      <InputGroup>
+                        <Label>
+                          Job Title<Required>*</Required>
+                        </Label>
+                        <Input
+                          type="text"
+                          name={`attendee${ind + 1}JobTitle`}
+                          onChange={handleChange}
+                          required
+                        />
+                        {formErrors[jobTitle] && (
+                          <Error>{formErrors[jobTitle]}</Error>
+                        )}
+                      </InputGroup>
+                      <InputGroup>
+                        <Label>
+                          Phone<Required>*</Required>
+                        </Label>
+                        <Input
+                          type="text"
+                          name={`attendee${ind + 1}Phone`}
+                          onChange={handleChange}
+                          required
+                        />
+                        {formErrors[phone] && (
+                          <Error>{formErrors[phone]}</Error>
+                        )}
+                      </InputGroup>
+                    </div>
+                  </div>
+                </FormCard2>
+              );
+            })}
+        </ContentWrapper2>
+      </PageWrapper2>
       <Footer />
     </>
   );
@@ -468,10 +666,32 @@ const PageWrapper = styled.div`
   padding: 4rem 0;
   background: #f2f6f7;
 `;
+const PageWrapper2 = styled.div`
+  display: flex;
+  /* grid-template-columns: 1fr; */
+  padding: 0rem 0;
+  background: #f2f6f7;
+  align-items: center;
+  justify-content: center;
+  margin-top: -2rem;
+`;
 
 const ContentWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 1rem;
+  }
+`;
+const ContentWrapper2 = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
   width: 100%;
   max-width: 1200px;
   gap: 20px;
@@ -488,7 +708,20 @@ const FormCard = styled.div`
   background: white;
   border-radius: 10px;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  padding: 8px 20px;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    width: 95%;
+    padding: 1rem;
+  }
+`;
+const FormCard2 = styled.div`
+  width: 100%;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
@@ -517,7 +750,7 @@ const InputRow = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   font-family: "Raleway";
 
   @media (max-width: 768px) {
@@ -528,7 +761,7 @@ const InputRow = styled.div`
 
 const InputGroup = styled.div`
   flex: 1;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   font-family: "Raleway";
 `;
 
@@ -551,7 +784,7 @@ const Required = styled.span`
 
 const Input = styled.input`
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -566,7 +799,7 @@ const Input = styled.input`
 
 const Select = styled.select`
   width: 100%;
-  padding: 12px;
+  padding: 9px;
   font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -621,6 +854,7 @@ const Error = styled.div`
 const CouponSection = styled.div`
   margin-top: 20px;
   font-family: "Raleway";
+  position: relative;
 `;
 
 const CouponInput = styled.input`

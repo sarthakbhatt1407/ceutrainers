@@ -5,6 +5,8 @@ import WebNav from "../components/Navbars/WebNav";
 import Footer from "../components/Footer";
 import { useNavigate, useParams } from "react-router";
 import MusicLoader from "../components/Loader/MusicLoader";
+import SRHM from "../assets/SHRM.png";
+import HRCI from "../assets/HRCI.png";
 import {
   AlarmOutlined,
   CalendarMonthOutlined,
@@ -253,50 +255,43 @@ const WebinarDetail = () => {
     // Parse the EST time as a Date object (assuming EST input is in HH:mm:ss format)
     const [hours, minutes, seconds] = estTime.split(":").map(Number);
     const estDate = new Date();
-    estDate.setUTCHours(hours + 5, minutes, seconds, 0); // Convert EST to UTC
+    estDate.setUTCHours(hours + 5, minutes || 0, seconds || 0, 0); // Convert EST to UTC
 
-    // Formatting options to get 24-hour format
+    // Formatting options for 12-hour format with AM/PM
     const timeFormatOptions = {
       hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false, // 24-hour format
+      // minute: "2-digit",
+      // second: "2-digit",
+      hour12: true, // 12-hour format
     };
 
-    // Format times in all required timezones in 24-hour format
-    const estTime24 = estDate.toLocaleTimeString("en-US", {
+    // Format times in all required time zones in 12-hour format
+    const estTime12 = estDate.toLocaleTimeString("en-US", {
       ...timeFormatOptions,
       timeZone: "America/New_York",
     });
 
-    const cstTime24 = estDate.toLocaleTimeString("en-US", {
+    const cstTime12 = estDate.toLocaleTimeString("en-US", {
       ...timeFormatOptions,
       timeZone: "America/Chicago",
     });
 
-    const mstTime24 = estDate.toLocaleTimeString("en-US", {
+    const mstTime12 = estDate.toLocaleTimeString("en-US", {
       ...timeFormatOptions,
       timeZone: "America/Denver",
     });
 
-    const pstTime24 = estDate.toLocaleTimeString("en-US", {
+    const pstTime12 = estDate.toLocaleTimeString("en-US", {
       ...timeFormatOptions,
       timeZone: "America/Los_Angeles",
     });
 
-    // Function to add AM/PM to 24-hour time
-    const addAMPM = (time24) => {
-      const [hour, minute, second] = time24.split(":");
-      const period = hour >= 12 ? "PM" : "AM";
-      return `${time24} ${period}`;
-    };
-
-    // Return the times in 24-hour format with AM/PM
+    // Return the times in 12-hour format with AM/PM
     return {
-      EST: addAMPM(estTime24),
-      CST: addAMPM(cstTime24),
-      MST: addAMPM(mstTime24),
-      PST: addAMPM(pstTime24),
+      EST: estTime12,
+      CST: cstTime12,
+      MST: mstTime12,
+      PST: pstTime12,
     };
   };
   // Selected options state
@@ -439,6 +434,8 @@ const WebinarDetail = () => {
                     display: "flex",
                     gap: ".3rem",
                     alignItems: "center",
+                    fontWeight: "bold",
+                    fontSize: "1.2rem",
                   }}
                 >
                   <CalendarMonthOutlined />
@@ -449,7 +446,8 @@ const WebinarDetail = () => {
                     display: "flex",
                     gap: ".3rem",
                     alignItems: "center",
-                    fontSize: "1.1rem",
+                    fontSize: "1.2rem",
+                    fontWeight: "bold",
                   }}
                 >
                   <TimerOutlined />
@@ -461,11 +459,11 @@ const WebinarDetail = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-
+                  fontWeight: "bold",
                   // width: "40%",
                   padding: ".5rem",
                   gap: "2rem",
-                  fontSize: "1.1rem",
+                  fontSize: "1.2rem",
                 }}
               >
                 <div
@@ -476,8 +474,8 @@ const WebinarDetail = () => {
                   }}
                 >
                   <AlarmOutlined />
-                  {courseData["time"]} (EST) | {"  "} {times["CST"]} (CST) |{" "}
-                  {times["MST"]} (MST) |{"  "} {times["PST"]} (PST)
+                  {times["EST"]} EST | {"  "} {times["CST"]} CST |{" "}
+                  {times["MST"]} MST |{"  "} {times["PST"]} PST
                 </div>
               </div>
               {/* <div
