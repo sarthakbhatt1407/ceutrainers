@@ -99,8 +99,9 @@ const LeftContent = styled.div`
   ul {
     li {
       line-height: 1.6;
-      color: #555;
-      font-size: 18px;
+
+      font-size: 16px;
+      font-family: "Open Sans", sans-serif;
     }
   }
 `;
@@ -564,10 +565,29 @@ const WebinarDetail = () => {
                   )}
                   {selectedTab === "Credits" && (
                     <div
-                      dangerouslySetInnerHTML={{
-                        __html: courseData.certificate,
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 2fr",
                       }}
-                    />
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+
+                          justifyContent: "space-around",
+                          alignItems: "center",
+                        }}
+                      >
+                        <img src={SRHM} alt="" width={170} />
+                        <img src={HRCI} alt="" width={170} />
+                      </div>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: courseData.certificate,
+                        }}
+                      />
+                    </div>
                   )}
                   {selectedTab === "FAQs" && <div>FAQs Content</div>}
                 </LeftContent>

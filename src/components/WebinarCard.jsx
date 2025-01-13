@@ -340,7 +340,7 @@ const WebinarCard = (props) => {
                 justifyContent: "center",
                 alignItems: "center",
                 gap: ".3rem",
-                fontWeight: "600",
+                fontWeight: "bold",
                 fontSize: ".95rem",
                 color: "#666",
               }}
