@@ -193,8 +193,7 @@ const Checkout = () => {
       <PageWrapper>
         <ContentWrapper>
           <FormCard>
-            <Title>Checkout</Title> <Divider />
-            <Title>Billing Information</Title>
+            <Title>Billing Information</Title> <Divider />
             <Form>
               <InputRow>
                 <InputGroup>
