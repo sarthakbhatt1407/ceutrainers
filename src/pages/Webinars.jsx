@@ -56,24 +56,6 @@ const Webinars = () => {
         }}
       >
         {" "}
-        <svg
-          width="789"
-          preserveAspectRatio="none"
-          height="465"
-          viewBox="0 0 789 465"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          class="background"
-        >
-          <path
-            class="back"
-            d="M194.578 178.421C227.705 152.454 259.699 105.242 292.685 67V465H32.7613C-7.16033 314.865 161.45 204.388 194.578 178.421Z"
-          ></path>{" "}
-          <path
-            class="front"
-            d="M181.185 1.71661e-05H789V465H71.6845C71.6845 465 155.685 313.5 62.6848 221C-30.3152 128.5 7.68492 0 7.68492 0L181.185 1.71661e-05Z"
-          ></path>{" "}
-        </svg>
         {loading && <MusicLoader />}
         {webinar &&
           webinar.map((webinar) => {
