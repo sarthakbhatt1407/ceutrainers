@@ -7,8 +7,11 @@ import { useNavigate } from "react-router";
 import Footer from "../components/Footer";
 import { Divider, message } from "antd";
 import MusicLoader from "../components/Loader/MusicLoader";
+import PayPalButtonComponent from "../components/PayPalButtonComponent";
 
 const Checkout = () => {
+  const [showPaymnet, setShowPayment] = useState(false);
+
   const [couponLoading, setCouponLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [discount, setDiscount] = useState(0);
@@ -141,71 +144,34 @@ const Checkout = () => {
     setAppliedCoupon(""); // Clear the applied coupon
   };
 
-  const validateInput = (e) => {
-    const { name, value } = e.target;
-    let errors = { ...formErrors };
+  const handleSubmit = async (event) => {
+    setShowPayment(true);
+    // // Form validation
+    // let errors = {};
+    // let isValid = true;
 
-    switch (name) {
-      case "firstName":
-      case "lastName":
-      case "companyName":
-      case "jobTitle":
-      case "phone":
-      case "email":
-      case "city":
-      case "state":
-      case "address1":
-      case "zip":
-        if (!value) {
-          errors[name] = "This field is required";
-        } else {
-          delete errors[name];
-        }
-        break;
-      case "email":
-        if (value && !/\S+@\S+\.\S+/.test(value)) {
-          errors[name] = "Please enter a valid email address";
-        } else {
-          delete errors[name];
-        }
-        break;
-      default:
-        break;
-    }
-    setFormErrors(errors);
-  };
+    // // Validate general form fields
+    // Object.keys(formValues).forEach((field) => {
+    //   const value = formValues[field];
+    //   if (!value) {
+    //     errors[field] = "This field is required";
+    //     isValid = false;
+    //   }
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
+    //   // Email validation
+    //   if (field.includes("Email") && value && !/\S+@\S+\.\S+/.test(value)) {
+    //     errors[field] = "Please enter a valid email address";
+    //     isValid = false;
+    //   }
+    // });
 
-    let errors = {};
-    let isValid = true;
+    // if (!isValid) {
+    //   console.log(formValues);
+    //   setFormErrors(errors);
+    //   alert("Please fill in all required fields correctly.");
 
-    // Validate general form fields
-    Object.keys(formValues).forEach((field) => {
-      const value = formValues[field];
-      if (!value) {
-        errors[field] = "This field is required";
-        isValid = false;
-      }
-
-      // Email validation
-      if (field.includes("Email") && value && !/\S+@\S+\.\S+/.test(value)) {
-        errors[field] = "Please enter a valid email address";
-        isValid = false;
-      }
-    });
-
-    if (!isValid) {
-      console.log(formValues);
-      setFormErrors(errors);
-      alert("Please fill in all required fields correctly.");
-    } else {
-      console.log(formValues);
-
-      alert("Form submitted successfully!");
-      // Proceed with form submission logic here
-    }
+    //   return;
+    // }
   };
 
   const isFormValid = true;
@@ -229,7 +195,7 @@ const Checkout = () => {
           <FormCard>
             <Title>Checkout</Title> <Divider />
             <Title>Billing Information</Title>
-            <Form onSubmit={handleFormSubmit}>
+            <Form>
               <InputRow>
                 <InputGroup>
                   <Label>
@@ -532,7 +498,10 @@ const Checkout = () => {
                     name="payment"
                     value="paypal"
                     checked={paymentMethod === "paypal"}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    onChange={(e) => {
+                      setPaymentMethod(e.target.value);
+                      setShowPayment(false);
+                    }}
                   />
                   <PaymentLabel>PayPal</PaymentLabel>
                 </PaymentOption>
@@ -543,7 +512,10 @@ const Checkout = () => {
                     name="payment"
                     value="stripe"
                     checked={paymentMethod === "stripe"}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    onChange={(e) => {
+                      setPaymentMethod(e.target.value);
+                      setShowPayment(false);
+                    }}
                   />
                   <PaymentLabel>Stripe</PaymentLabel>
                 </PaymentOption>
@@ -555,9 +527,14 @@ const Checkout = () => {
                 </TotalValue>
               </TotalRow> */}
             </PaymentSection>
-            {isFormValid && (
+            {showPaymnet && paymentMethod == "paypal" && (
+              <PayPalButtonComponent
+                price={cartItems.reduce((a, b) => a + b.price, 0) - discount}
+              />
+            )}
+            {isFormValid && !showPaymnet && (
               <Actions>
-                <ButtonSubmit onClick={handleFormSubmit}>Continue</ButtonSubmit>
+                <ButtonSubmit onClick={handleSubmit}>Continue</ButtonSubmit>
               </Actions>
             )}
           </CartHighlight>

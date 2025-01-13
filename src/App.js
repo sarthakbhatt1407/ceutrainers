@@ -36,7 +36,7 @@ const App = () => {
   // console.log(process.env.REACT_APP_BASE_URL);
 
   return (
-    <div>
+    <>
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/webinars" exact element={<Webinars />} />
@@ -46,7 +46,7 @@ const App = () => {
         <Route path="/checkout" exact element={<Checkout />} />
         <Route path="*" exact element={<Error />} />
       </Routes>
-    </div>
+    </>
   );
 };
 
