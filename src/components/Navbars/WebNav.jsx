@@ -63,6 +63,7 @@ function WebNav({ mode, toggleColorMode }) {
         backgroundImage: "none",
         mt: 2,
         padding: "1rem 3rem",
+        zIndex: "100000",
       }}
     >
       <Container maxWidth="xl">

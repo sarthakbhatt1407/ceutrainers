@@ -11,14 +11,18 @@ import {
   Twitter,
   YouTube,
 } from "@mui/icons-material";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import footerimg from "../assets/footerimg.png";
+import payment from "../assets/payment.webp";
 const MainDiv = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 1rem;
-  background-color: #f7f7f7a7;
-  margin-top: 2rem;
+  background-color: white;
+  /* margin-top: 2rem; */
+  height: 60vh;
+  align-items: center;
+
   @media only screen and (min-width: 351px) and (max-width: 950px) {
     margin-top: 6rem;
   }
@@ -26,13 +30,17 @@ const MainDiv = styled.div`
 
 const FirstDiv = styled.div`
   /* background-color: red; */
-  width: 80%;
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
-  padding: 1rem 2rem;
-  border-bottom: 1px solid #eee;
-  display: grid;
-  grid-template-columns: 1fr 2fr 2fr;
-  gap: 2rem;
+
+  padding: 0rem 1rem;
+
+  /* border-bottom: 1px solid #eee; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
   @media only screen and (min-width: 351px) and (max-width: 950px) {
     display: flex;
     flex-direction: column-reverse;
@@ -41,54 +49,28 @@ const FirstDiv = styled.div`
   }
 `;
 
-const LeftDiv = styled.div`
-  padding: 1rem 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
-  /* background-color: red; */
-  gap: 1rem;
-  img {
-    width: 14rem;
-  }
-  div {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: start;
-    align-items: center;
-    width: 100%;
-    padding: 1rem 0.2rem;
-    svg {
-      transform: scale(1.7);
-    }
-  }
-  @media only screen and (min-width: 351px) and (max-width: 950px) {
-    div {
-      justify-content: center;
-      align-items: center;
-      gap: 1.8rem;
-    }
-  }
-`;
-
 const MidDiv = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
+  height: 100%;
+  justify-content: center;
+  img {
+    width: 75%;
+  }
   h2 {
-    font-size: 2.4rem;
+    font-size: 1.7rem;
     text-transform: capitalize;
   }
   div {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
     justify-content: center;
     /* background-color: red; */
     width: 100%;
     gap: 1rem;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     text-transform: capitalize;
     @media only screen and (max-width: 700px) {
     }
@@ -109,10 +91,122 @@ const MidDiv = styled.div`
       }
       &:hover {
         color: #d61c01;
-        transform: scale(1.1);
+        transform: scale(1);
       }
       @media only screen and (max-width: 700px) {
-        font-size: 1.2rem;
+        font-size: 1rem;
+        gap: 0.4rem;
+      }
+    }
+  }
+`;
+
+const LastDivBox = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: red;
+  align-items: center;
+  justify-content: space-between;
+  width: 50%;
+  height: 100%;
+  background-image: url(${footerimg});
+  background-size: cover; /* Ensures the image covers the entire div */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents tiling */
+`;
+const LastDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  color: white;
+  img {
+    width: 60%;
+  }
+
+  h2 {
+    font-size: 1.7rem;
+    text-transform: capitalize;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    width: 100%;
+    gap: 1rem;
+    font-size: 1.1rem;
+    text-transform: capitalize;
+    color: white;
+    div {
+      display: flex;
+      justify-content: start;
+      flex-direction: row;
+      
+      align-items: start;
+      input{
+        background-clip: padding-box;
+    background-image: none;
+    border: 1px solid var(--fluentform-border-color);
+    border-radius: var(--fluentform-border-radius);
+    color: var(--fluentform-secondary);
+    font-family: -apple-system, "system-ui", Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+    line-height: 1;
+    margin-bottom: 0;
+    max-width: 100%;
+    padding: 11px 15px;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+      }
+      button{
+        border: 1px solid transparent;
+    border-radius: 7px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    padding: 8px 20px;
+    position: relative;
+    text-align: center;
+    transition: background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+      }
+    }
+    @media only screen and (max-width: 700px) {
+      /* Additional responsive styles if needed */
+    }
+
+    span {
+      cursor: pointer;
+      transition: all 0.4s;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+
+      a {
+        text-decoration: none;
+        color: black;
+
+        &:hover {
+          color: #d61c01;
+        }
+      }
+
+      &:hover {
+        color: #d61c01;
+        transform: scale(1);
+      }
+
+      @media only screen and (max-width: 700px) {
+        font-size: 1rem;
         gap: 0.4rem;
       }
     }
@@ -128,104 +222,78 @@ const SecondDiv = styled.div`
 `;
 
 const Footer = () => {
+  const navigate = useNavigate();
   const scrollToSection = (sectionId) => {
-    const sectionElement = document.getElementById(sectionId);
-    const offset = 128;
-    if (sectionElement) {
-      const targetScroll = sectionElement.offsetTop - offset;
-      sectionElement.scrollIntoView({ behavior: "smooth" });
-      window.scrollTo({
-        top: targetScroll,
-        behavior: "smooth",
-      });
-    }
+    navigate(`/${sectionId}`);
   };
   return (
     <MainDiv>
       <FirstDiv>
-        <LeftDiv>
-          <img src={logo} alt="" />
+        <MidDiv
+          style={{
+            marginLeft: "3rem",
+          }}
+        >
+          <h2>Quick links</h2>
           <div>
-            <Link>
-              <FacebookOutlined
-                style={{
-                  color: "#3338A3",
-                }}
-              />
-            </Link>
-            <Link>
-              <Instagram
-                style={{
-                  color: "#F77D41",
-                }}
-              />
-            </Link>
-            <Link>
-              <YouTube
-                style={{
-                  color: "#ff0015",
-                }}
-              />
-            </Link>
-            <Link>
-              <LinkedIn
-                style={{
-                  color: "#114B84",
-                }}
-              />
-            </Link>
-            <Link>
-              <Twitter
-                style={{
-                  color: "#55ACEE",
-                }}
-              />
-            </Link>
+            <span onClick={scrollToSection.bind(this, "webinars")}>
+              Webinars
+            </span>
+            <span onClick={scrollToSection.bind(this, "webinars")}>
+              Webinars
+            </span>
+
+            <span onClick={scrollToSection.bind(this, "webinars")}>
+              Webinars
+            </span>
+            <span onClick={scrollToSection.bind(this, "webinars")}>
+              Webinars
+            </span>
           </div>
-        </LeftDiv>
+        </MidDiv>
         <MidDiv>
           <h2>Quick links</h2>
           <div>
-            <span onClick={scrollToSection.bind(this, "overview")}>
-              Overview
+            <span onClick={scrollToSection.bind(this, "webinars")}>
+              Webinars
             </span>
-            <span onClick={scrollToSection.bind(this, "services")}>
-              services
+            <span onClick={scrollToSection.bind(this, "webinars")}>
+              Webinars
             </span>
 
-            <span onClick={scrollToSection.bind(this, "contact-us")}>
-              contact us
+            <span onClick={scrollToSection.bind(this, "webinars")}>
+              Webinars
             </span>
-            <span onClick={scrollToSection.bind(this, "startwithus")}>
-              start with us
+            <span onClick={scrollToSection.bind(this, "webinars")}>
+              Webinars
             </span>
           </div>
         </MidDiv>
-        <MidDiv className="middiv">
-          <h2>Get In touch</h2>
-          <div>
-            <span>
-              <Phone /> +911234567890 +911234567890
-            </span>
-            <span style={{ textTransform: "none" }}>
-              <Mail /> abc@gmail.com
-            </span>
 
-            <span style={{ textAlign: "center" }}>
-              <Link
-                target="_blank"
-                to={"https://maps.app.goo.gl/6ccoSexVq3rMYA1r6"}
-              >
-                <LocationCity />
-                loerm20, ipsum dolor sit amet, consectetur
-              </Link>
-            </span>
-          </div>
-        </MidDiv>
+        <LastDivBox className="middiv">
+          <LastDiv>
+            {/* <h2>Payment</h2> */}
+            <img src={payment} alt="" />
+          </LastDiv>
+          <LastDiv>
+            <h2>Get started</h2>
+            <div>
+              <span style={{ textTransform: "none" }}>
+                Subscribe to our newsletters. Stay updated to our events. We
+                never spam, We promise.
+              </span>
+
+              <div>
+                <input type="text" placeholder="Your mail" />
+                <button>Subscribe</button>
+              </div>
+            </div>
+          </LastDiv>
+        </LastDivBox>
       </FirstDiv>
-      <SecondDiv>
+      {/* <SecondDiv>
         <p>Copyright © 2024 XYZ. All rights reserved.</p>
-      </SecondDiv>
+      </SecondDiv> */}
     </MainDiv>
   );
 };

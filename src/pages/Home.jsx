@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import WebNav from "../components/Navbars/WebNav";
 import PagaeHeader from "../components/PagaeHeader";
 import PageBuffer from "../components/PageBuffer";
+import SliderComponent from "../components/SliderComponent";
 
 const Home = () => {
   return (
@@ -13,6 +14,7 @@ const Home = () => {
       <WebNav />
 
       <div>
+        <SliderComponent />
         <Footer />
       </div>
     </>
