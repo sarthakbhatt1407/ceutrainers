@@ -93,6 +93,9 @@ function WebNav({ mode, toggleColorMode }) {
               src="https://ceuservices.com/assets/img/Logo.png"
               style={logoStyle}
               alt="logo of sitemark"
+              onClick={() => {
+                navigate("/");
+              }}
             />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <MenuItem
