@@ -32,6 +32,7 @@ const Webinars = () => {
   };
 
   useEffect(() => {
+    document.title = "Webinars";
     fetcher();
   }, []);
 

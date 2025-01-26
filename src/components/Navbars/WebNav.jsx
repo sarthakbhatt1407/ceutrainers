@@ -43,6 +43,7 @@ function WebNav({ mode, toggleColorMode }) {
 
   const handleCloseMenu = () => {
     setDropdownOpen(false);
+    setDropdownOpen2(false);
   };
 
   const w = window.screen.width;
@@ -161,14 +162,54 @@ function WebNav({ mode, toggleColorMode }) {
                     navigate("/webinars");
                     setDropdownOpen(false);
                   }}
+                  style={{
+                    borderBottom: "1px solid #e1e0e0",
+                  }}
                 >
                   <Typography
                     sx={{
                       fontFamily: "Raleway",
                       fontWeight: "500",
+                      padding: ".5rem 0",
                     }}
                   >
-                    Category 1
+                    Human Resources
+                  </Typography>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setActive("webinars");
+                    navigate("/webinars");
+                    setDropdownOpen(false);
+                  }}
+                  style={{ borderBottom: "1px solid #e1e0e0" }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "Raleway",
+                      fontWeight: "500",
+                      padding: ".5rem 0",
+                    }}
+                  >
+                    Payroll & Taxation
+                  </Typography>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setActive("webinars");
+                    navigate("/webinars");
+                    setDropdownOpen(false);
+                  }}
+                  style={{ borderBottom: "1px solid #e1e0e0" }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "Raleway",
+                      fontWeight: "500",
+                      padding: ".5rem 0",
+                    }}
+                  >
+                    BFSI & Accounting
                   </Typography>
                 </MenuItem>
                 <MenuItem
@@ -182,25 +223,10 @@ function WebNav({ mode, toggleColorMode }) {
                     sx={{
                       fontFamily: "Raleway",
                       fontWeight: "500",
+                      padding: ".5rem 0",
                     }}
                   >
-                    Category 2
-                  </Typography>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    setActive("webinars");
-                    navigate("/webinars");
-                    setDropdownOpen(false);
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontFamily: "Raleway",
-                      fontWeight: "500",
-                    }}
-                  >
-                    Category 3
+                    Housing & Construction
                   </Typography>
                 </MenuItem>
               </Menu>
@@ -364,11 +390,13 @@ function WebNav({ mode, toggleColorMode }) {
                     navigate("/");
                     setDropdownOpen(false);
                   }}
+                  style={{ borderBottom: "1px solid #e1e0e0" }}
                 >
                   <Typography
                     sx={{
                       fontFamily: "Raleway",
                       fontWeight: "500",
+                      padding: ".5rem 0",
                     }}
                   >
                     Get in touch
@@ -385,6 +413,7 @@ function WebNav({ mode, toggleColorMode }) {
                     sx={{
                       fontFamily: "Raleway",
                       fontWeight: "500",
+                      padding: ".5rem 0",
                     }}
                   >
                     FAQ
@@ -429,7 +458,7 @@ function WebNav({ mode, toggleColorMode }) {
               </MenuItem>
             </Box>
           </Box>
-
+          {/* 
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
@@ -460,12 +489,13 @@ function WebNav({ mode, toggleColorMode }) {
                 Register
               </Link>
             </Button>
-          </Box>
+          </Box> */}
           <Box sx={{ display: { sm: "", md: "none" } }}>
             <Button
               variant="text"
               aria-label="menu"
               onClick={toggleDrawer(true)}
+              open={open}
               sx={{ minWidth: "30px", p: "4px" }}
             >
               <Reorder style={{ color: "black" }} />
@@ -509,15 +539,11 @@ function WebNav({ mode, toggleColorMode }) {
                 >
                   FAQ
                 </MenuItem>
-                <MenuItem
-                  style={{
-                    fontFamily: "Raleway",
-                  }}
-                >
+                <MenuItem style={{ borderBottom: "1px solid #e1e0e0" }}>
                   Get in touch
                 </MenuItem>
-                <Divider />
 
+                {/* 
                 <MenuItem>
                   <Button
                     color="primary"
@@ -541,11 +567,11 @@ function WebNav({ mode, toggleColorMode }) {
                           fontFamily: "Raleway",
                         }}
                       >
-                        Resgister Now
+                        Register Now
                       </Link>
                     )}
                   </Button>
-                </MenuItem>
+                </MenuItem> */}
               </Box>
             </Drawer>
           </Box>

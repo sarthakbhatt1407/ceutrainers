@@ -47,6 +47,7 @@ const Checkout = () => {
     address2: "",
   });
   const [formErrors, setFormErrors] = useState({});
+  const [payload, setpayload] = useState(null);
   const [isCouponApplied, setIsCouponApplied] = useState(false);
   const [couponCode, setCouponCode] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("paypal");
@@ -55,8 +56,9 @@ const Checkout = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    document.title = "Checkout";
     let obj;
-    if (cartItems.length > 0) {
+    if (cartItems.length == 1) {
       // Extract the numeric value from the option string
       const extractedValue = cartItems[0]["option"].split(" ")[0];
 
@@ -145,33 +147,62 @@ const Checkout = () => {
   };
 
   const handleSubmit = async (event) => {
+    event.preventDefault(); // Prevent the default form submission behavior
+    let attendeesData = [];
+    // Extract attendees data
+    if (cartItems.length < 2) {
+      attendeesData = attendees.map((_, index) => {
+        const attendeeIndex = index + 1; // Attendee indices start from 1
+        return {
+          name: formValues[`attendee${attendeeIndex}Name`],
+          email: formValues[`attendee${attendeeIndex}Email`],
+          phone: formValues[`attendee${attendeeIndex}Phone`],
+          jobTitle: formValues[`attendee${attendeeIndex}JobTitle`],
+        };
+      });
+    }
+
+    // Log the structured attendees array (optional for debugging)
+    // console.log("Attendees:", attendeesData);
+
+    // Form validation
+    let errors = {};
+    let isValid = true;
+
+    // Validate general form fields
+    Object.keys(formValues).forEach((field) => {
+      const value = formValues[field];
+      if (!value) {
+        errors[field] = "This field is required";
+        isValid = false;
+      }
+
+      // Email validation
+      if (field.includes("Email") && value && !/\S+@\S+\.\S+/.test(value)) {
+        errors[field] = "Please enter a valid email address";
+        isValid = false;
+      }
+    });
+
+    // If validation fails, set errors and stop submission
+    if (!isValid) {
+      console.log(formValues);
+      setFormErrors(errors);
+      alert("Please fill in all required fields correctly.");
+      return;
+    }
     setShowPayment(true);
-    // // Form validation
-    // let errors = {};
-    // let isValid = true;
 
-    // // Validate general form fields
-    // Object.keys(formValues).forEach((field) => {
-    //   const value = formValues[field];
-    //   if (!value) {
-    //     errors[field] = "This field is required";
-    //     isValid = false;
-    //   }
-
-    //   // Email validation
-    //   if (field.includes("Email") && value && !/\S+@\S+\.\S+/.test(value)) {
-    //     errors[field] = "Please enter a valid email address";
-    //     isValid = false;
-    //   }
-    // });
-
-    // if (!isValid) {
-    //   console.log(formValues);
-    //   setFormErrors(errors);
-    //   alert("Please fill in all required fields correctly.");
-
-    //   return;
-    // }
+    // Prepare data for submission
+    const { attendees: _, ...otherFormValues } = formValues; // Exclude attendees from top-level fields
+    const payloadVal = {
+      ...otherFormValues,
+      attendees: attendeesData, // Include attendees array
+      discount, // Include discount if applicable
+      paymentMethod, // Include selected payment method
+      appliedCoupon, // Include applied coupon if any
+    };
+    setpayload(payloadVal);
   };
 
   const isFormValid = true;
@@ -372,7 +403,7 @@ const Checkout = () => {
                 />
               </InputGroup>
 
-              {attendees && attendees.length < 2 && (
+              {attendees && attendees.length < 2 && cartItems.length < 2 && (
                 <div
                   style={{
                     display: "flex",
@@ -385,7 +416,27 @@ const Checkout = () => {
                   <input
                     type="checkbox"
                     onChange={(e) => {
-                      const isChecked = e.target.checked; // Get the checked state
+                      const isChecked = e.target.checked;
+
+                      if (isChecked) {
+                        setFormValues((prevState) => ({
+                          ...prevState,
+                          attendee1Name:
+                            formValues.firstName + " " + formValues.lastName,
+                          attendee1Email: formValues.email,
+                          attendee1Phone: formValues.phone,
+                          attendee1JobTitle: formValues.jobTitle,
+                        }));
+                      } else {
+                        setFormValues((prevState) => ({
+                          ...prevState,
+                          attendee1Name: "",
+                          attendee1Email: "",
+                          attendee1Phone: "",
+                          attendee1JobTitle: "",
+                        }));
+                      }
+
                       console.log(isChecked);
                       setChecked(isChecked);
                     }}
@@ -529,6 +580,7 @@ const Checkout = () => {
             {showPaymnet && paymentMethod == "paypal" && (
               <PayPalButtonComponent
                 price={cartItems.reduce((a, b) => a + b.price, 0) - discount}
+                payload={{ ...payload }}
               />
             )}
             {isFormValid && !showPaymnet && (
@@ -541,21 +593,20 @@ const Checkout = () => {
       </PageWrapper>
       <PageWrapper2>
         <ContentWrapper2>
-          {!checked &&
-            cartItems.length < 2 &&
-            attendees &&
-            attendees.map((i, ind) => {
-              const name = `attendee${ind + 1}Name`;
-              const email = `attendee${ind + 1}Email`;
-              const phone = `attendee${ind + 1}Phone`;
-              const jobTitle = `attendee${ind + 1}JobTitle`;
-              return (
-                <FormCard2>
-                  {" "}
+          <FormCard2>
+            {!checked &&
+              cartItems.length < 2 &&
+              attendees &&
+              attendees.map((i, ind) => {
+                const name = `attendee${ind + 1}Name`;
+                const email = `attendee${ind + 1}Email`;
+                const phone = `attendee${ind + 1}Phone`;
+                const jobTitle = `attendee${ind + 1}JobTitle`;
+                return (
                   <div
                     style={{
                       padding: ".5rem",
-                      margin: "1rem 0 ",
+                      margin: ".5rem 0 ",
                       borderRadius: ".5rem",
                     }}
                   >
@@ -624,9 +675,9 @@ const Checkout = () => {
                       </InputGroup>
                     </div>
                   </div>
-                </FormCard2>
-              );
-            })}
+                );
+              })}
+          </FormCard2>
         </ContentWrapper2>
       </PageWrapper2>
       <Footer />
@@ -646,6 +697,7 @@ const PageWrapper2 = styled.div`
   display: flex;
   /* grid-template-columns: 1fr; */
   padding: 0rem 0;
+  padding-bottom: 3rem;
   background: #f2f6f7;
   align-items: center;
   justify-content: center;
@@ -697,7 +749,7 @@ const FormCard2 = styled.div`
   background: white;
   border-radius: 10px;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
-  padding: 10px;
+  padding: 7px 10px;
   box-sizing: border-box;
 
   @media (max-width: 768px) {

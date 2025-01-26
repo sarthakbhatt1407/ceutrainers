@@ -13,6 +13,7 @@ const Cart = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    document.title = "Cart";
     document.body.scrollTop = document.documentElement.scrollTop = 0;
   }, []);
 

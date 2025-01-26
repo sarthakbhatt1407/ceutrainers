@@ -10,10 +10,10 @@ import WebinarDetail from "./pages/WebinarDetail";
 import Error from "./pages/Error";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import OrderConfirmation from "./pages/OrderConfirmation";
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
-  const isAdmin = useSelector((state) => state.isAdmin);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -44,6 +44,7 @@ const App = () => {
         <Route path="/webinars/:slug/:id" exact element={<WebinarDetail />} />
         <Route path="/cart" exact element={<Cart />} />
         <Route path="/checkout" exact element={<Checkout />} />
+        <Route path="/order-succes" exact element={<OrderConfirmation />} />
         <Route path="*" exact element={<Error />} />
       </Routes>
     </>

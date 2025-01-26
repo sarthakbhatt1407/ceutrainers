@@ -22,7 +22,7 @@ const MainDiv = styled.div`
   /* margin-top: 2rem; */
   height: 60vh;
   align-items: center;
-
+  overflow: hidden;
   @media only screen and (min-width: 351px) and (max-width: 950px) {
     margin-top: 6rem;
   }
@@ -234,39 +234,47 @@ const Footer = () => {
             marginLeft: "3rem",
           }}
         >
-          <h2>Quick links</h2>
+          <h2>Webinars</h2>
           <div>
-            <span onClick={scrollToSection.bind(this, "webinars")}>
-              Webinars
+            <span
+              onClick={() => {
+                navigate("/webinars");
+              }}
+            >
+              Human Resource
             </span>
-            <span onClick={scrollToSection.bind(this, "webinars")}>
-              Webinars
+            <span
+              onClick={() => {
+                navigate("/webinars");
+              }}
+            >
+              Payroll & Taxation
             </span>
 
-            <span onClick={scrollToSection.bind(this, "webinars")}>
-              Webinars
+            <span
+              onClick={() => {
+                navigate("/webinars");
+              }}
+            >
+              BFSI & Accounting
             </span>
-            <span onClick={scrollToSection.bind(this, "webinars")}>
-              Webinars
+            <span
+              onClick={() => {
+                navigate("/webinars");
+              }}
+            >
+              Housing & Construction
             </span>
           </div>
         </MidDiv>
         <MidDiv>
-          <h2>Quick links</h2>
+          <h2>Company Info</h2>
           <div>
-            <span onClick={scrollToSection.bind(this, "webinars")}>
-              Webinars
-            </span>
-            <span onClick={scrollToSection.bind(this, "webinars")}>
-              Webinars
-            </span>
+            <span>About Us</span>
+            <span>Privacy Policy</span>
 
-            <span onClick={scrollToSection.bind(this, "webinars")}>
-              Webinars
-            </span>
-            <span onClick={scrollToSection.bind(this, "webinars")}>
-              Webinars
-            </span>
+            <span>Terms and Condition</span>
+            <span>Our Speaker</span>
           </div>
         </MidDiv>
 

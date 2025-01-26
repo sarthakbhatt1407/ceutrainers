@@ -99,7 +99,7 @@ const LeftContent = styled.div`
   ul {
     li {
       line-height: 1.6;
-
+      color: #3b3b4f;
       font-size: 16px;
       font-family: "Open Sans", sans-serif;
     }
@@ -135,7 +135,7 @@ const RightContent = styled.div`
   h4 {
     font-size: 1.4rem;
     color: #408a78;
-    font-family: "Raleway";
+    font-family: "Open Sans", sans-serif;
 
     margin-bottom: 10px;
   }
@@ -150,7 +150,7 @@ const RightContent = styled.div`
       align-items: center;
       margin-bottom: 10px;
       gap: 1rem;
-      font-family: "Raleway";
+      font-family: "Open Sans", sans-serif;
       font-size: 1.2rem;
       border-bottom: 1px solid #9a9a9a;
       padding-bottom: 15px;
@@ -160,7 +160,7 @@ const RightContent = styled.div`
         gap: 10px;
         font-size: 15px;
         font-weight: 450;
-        font-family: "Raleway";
+        font-family: "Open Sans", sans-serif;
       }
 
       input {
@@ -171,8 +171,7 @@ const RightContent = styled.div`
 
       span {
         font-size: 14px;
-        font-family: "Raleway";
-        color: #555;
+        font-family: "Open Sans", sans-serif;
       }
     }
   }
@@ -246,6 +245,8 @@ const HeaderBox = styled.div`
 const WebinarDetail = () => {
   const navigate = useNavigate();
   const id = useParams().id;
+  let tit = useParams().slug;
+
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
@@ -353,6 +354,8 @@ const WebinarDetail = () => {
   };
 
   useEffect(() => {
+    tit = tit.charAt(0).toUpperCase() + tit.slice(1);
+    document.title = tit; // Set the dynamic title
     document.body.scrollTop = document.documentElement.scrollTop = 0;
     // Function to fetch course details
     const fetchCourseDetails = async () => {
