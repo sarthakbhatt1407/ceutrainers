@@ -11,6 +11,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "@mui/icons-material";
+import { useNavigate } from "react-router";
 
 // Array of slide data
 const slides = [
@@ -21,12 +22,12 @@ const slides = [
   },
   {
     heading: "Remote learning made easy",
-    buttonText: "Get Started",
+    buttonText: "BOOK TODAY",
     backgroundImage: img2,
   },
   {
     heading: "Open Programming Courses",
-    buttonText: "Contact Us",
+    buttonText: "BOOK TODAY",
     backgroundImage: img3,
   },
 ];
@@ -138,6 +139,7 @@ const SliderComponent = () => {
       prevIndex === 0 ? slides.length - 1 : prevIndex - 1
     );
   };
+  const navigate = useNavigate();
 
   return (
     <Carousel
@@ -216,7 +218,13 @@ const SliderComponent = () => {
               available booking slot from the calendar and you can pay directly
               online.
             </Typography>
-            <button>{slide.buttonText}</button>
+            <button
+              onClick={() => {
+                navigate("/webinars");
+              }}
+            >
+              {slide.buttonText}
+            </button>
           </ContentBox>
         </SlideBox>
       ))}

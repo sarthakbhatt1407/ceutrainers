@@ -188,7 +188,7 @@ const Checkout = () => {
     if (!isValid) {
       console.log(formValues);
       setFormErrors(errors);
-      alert("Please fill in all required fields correctly.");
+      error("Please fill in all required fields correctly.");
       return;
     }
     setShowPayment(true);
@@ -329,9 +329,16 @@ const Checkout = () => {
                     required
                   >
                     <option value="">Select a Country</option>
-                    <option value="USA">USA</option>
-                    <option value="Canada">Canada</option>
-                    <option value="UK">UK</option>
+                    <option value="United States (USA)">
+                      United States (USA)
+                    </option>
+                    <option value="United Kindom (UK)">
+                      United Kindom (UK)
+                    </option>
+                    <option value="Australia">Australia</option>
+                    <option value="England">England</option>
+                    <option value="Switzerland">Switzerland</option>
+                    <option value="New Zealand">New Zealand</option>
                   </Select>
                   {formErrors.country && <Error>{formErrors.country}</Error>}
                 </InputGroup>
@@ -412,7 +419,7 @@ const Checkout = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Label>Attendee same as upper person</Label>
+                  <Label>Apply Same Details as Above</Label>
                   <input
                     type="checkbox"
                     onChange={(e) => {
@@ -593,91 +600,106 @@ const Checkout = () => {
       </PageWrapper>
       <PageWrapper2>
         <ContentWrapper2>
-          <FormCard2>
-            {!checked &&
-              cartItems.length < 2 &&
-              attendees &&
-              attendees.map((i, ind) => {
-                const name = `attendee${ind + 1}Name`;
-                const email = `attendee${ind + 1}Email`;
-                const phone = `attendee${ind + 1}Phone`;
-                const jobTitle = `attendee${ind + 1}JobTitle`;
-                return (
-                  <div
-                    style={{
-                      padding: ".5rem",
-                      margin: ".5rem 0 ",
-                      borderRadius: ".5rem",
-                    }}
-                  >
-                    <Title>Attendee {ind + 1}</Title>
-
+          {!checked && (
+            <FormCard2>
+              {!checked &&
+                cartItems.length < 2 &&
+                attendees &&
+                attendees.map((i, ind) => {
+                  const name = `attendee${ind + 1}Name`;
+                  const email = `attendee${ind + 1}Email`;
+                  const phone = `attendee${ind + 1}Phone`;
+                  const jobTitle = `attendee${ind + 1}JobTitle`;
+                  return (
                     <div
                       style={{
-                        display: "flex",
-                        gap: "1rem",
+                        padding: ".5rem",
+                        margin: ".5rem 0 ",
+                        borderRadius: ".5rem",
+                        marginBottom: "-.5rem",
+                        paddingBottom: "1rem",
                       }}
                     >
-                      <InputGroup>
-                        <Label>
-                          Name<Required>*</Required>
-                        </Label>
-                        <Input
-                          type="text"
-                          name={`attendee${ind + 1}Name`}
-                          onChange={handleChange}
-                          required
-                        />
-                        {formErrors[name] && <Error>{formErrors[name]}</Error>}
-                      </InputGroup>
+                      <Title
+                        style={{
+                          marginBottom: "10px",
+                        }}
+                      >
+                        Attendee {ind + 1}
+                      </Title>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "1rem",
+                        }}
+                      >
+                        <InputGroup
+                          style={{
+                            marginBottom: "5px",
+                          }}
+                        >
+                          <Label>
+                            Name<Required>*</Required>
+                          </Label>
+                          <Input
+                            type="text"
+                            name={`attendee${ind + 1}Name`}
+                            onChange={handleChange}
+                            required
+                          />
+                          {formErrors[name] && (
+                            <Error>{formErrors[name]}</Error>
+                          )}
+                        </InputGroup>
 
-                      <InputGroup>
-                        <Label>
-                          Email<Required>*</Required>
-                        </Label>
-                        <Input
-                          type="text"
-                          name={`attendee${ind + 1}Email`}
-                          onChange={handleChange}
-                          required
-                        />
-                        {formErrors[email] && (
-                          <Error>{formErrors[email]}</Error>
-                        )}
-                      </InputGroup>
-                      <InputGroup>
-                        <Label>
-                          Job Title<Required>*</Required>
-                        </Label>
-                        <Input
-                          type="text"
-                          name={`attendee${ind + 1}JobTitle`}
-                          onChange={handleChange}
-                          required
-                        />
-                        {formErrors[jobTitle] && (
-                          <Error>{formErrors[jobTitle]}</Error>
-                        )}
-                      </InputGroup>
-                      <InputGroup>
-                        <Label>
-                          Phone<Required>*</Required>
-                        </Label>
-                        <Input
-                          type="text"
-                          name={`attendee${ind + 1}Phone`}
-                          onChange={handleChange}
-                          required
-                        />
-                        {formErrors[phone] && (
-                          <Error>{formErrors[phone]}</Error>
-                        )}
-                      </InputGroup>
+                        <InputGroup>
+                          <Label>
+                            Email<Required>*</Required>
+                          </Label>
+                          <Input
+                            type="text"
+                            name={`attendee${ind + 1}Email`}
+                            onChange={handleChange}
+                            required
+                          />
+                          {formErrors[email] && (
+                            <Error>{formErrors[email]}</Error>
+                          )}
+                        </InputGroup>
+                        <InputGroup>
+                          <Label>
+                            Job Title<Required>*</Required>
+                          </Label>
+                          <Input
+                            type="text"
+                            name={`attendee${ind + 1}JobTitle`}
+                            onChange={handleChange}
+                            required
+                          />
+                          {formErrors[jobTitle] && (
+                            <Error>{formErrors[jobTitle]}</Error>
+                          )}
+                        </InputGroup>
+                        <InputGroup>
+                          <Label>
+                            Phone<Required>*</Required>
+                          </Label>
+                          <Input
+                            type="text"
+                            name={`attendee${ind + 1}Phone`}
+                            onChange={handleChange}
+                            required
+                          />
+                          {formErrors[phone] && (
+                            <Error>{formErrors[phone]}</Error>
+                          )}
+                        </InputGroup>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-          </FormCard2>
+                  );
+                })}
+            </FormCard2>
+          )}
         </ContentWrapper2>
       </PageWrapper2>
       <Footer />
@@ -749,7 +771,7 @@ const FormCard2 = styled.div`
   background: white;
   border-radius: 10px;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
-  padding: 7px 10px;
+  padding: 4px 10px;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
