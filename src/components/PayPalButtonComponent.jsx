@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const PayPalButtonComponent = (props) => {
   const cartItems = useSelector((state) => state.cart);
   const [price, setPrice] = useState(props.price); // Initialize price with props
+  const [key, setKey] = useState(props.paypalKey); // Initialize price with props
   const [payload, setPayload] = useState(props.payload); // Initialize price with props
+  const [orderId, setOrderId] = useState("");
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const initialOptions = {
-    "client-id":
-      "ATk9aUiXtazhMix65nRW52-lq_gvHgmrsiRm91xGCbRO2uVe5CtlkxP0jbZzvGVPimmRCIzZAstXIJgW", // Replace with your actual PayPal client ID
+    "client-id": key, // Replace with your actual PayPal client ID
     "disable-funding": "venmo,paylater,card", // Disable credit cards, pay-later, and Venmo
     currency: "USD", // Currency
   };
@@ -21,7 +23,9 @@ const PayPalButtonComponent = (props) => {
   useEffect(() => {
     setPrice(props.price);
     setPayload(props.payload);
-  }, [props.price, props.payload]); // The component will re-render whenever props.price changes
+    setKey(props.paypalKey);
+    setOrderId(Math.floor(1000000 + Math.random() * 9000000));
+  }, [props.price, props.payload, props.key]); // The component will re-render whenever props.price changes
 
   return (
     <PayPalScriptProvider options={initialOptions}>
@@ -33,21 +37,19 @@ const PayPalButtonComponent = (props) => {
           label: "paypal",
         }}
         createOrder={(data, actions) => {
-          // Client-side order creation - no REST API interaction
           return actions.order.create({
-            purchase_units: [
-              {
-                amount: {
-                  value: `${price}`, // Use the updated price
-                },
+            purchase_units: cartItems.map((item) => ({
+              amount: {
+                value: `${item.price}`, // Use the item's price
               },
-            ],
+              description: item.title, // Course name
+            })),
           });
         }}
         onCancel={async (data, actions) => {
           // Display message when payment is canceled
           setMessage("Payment was canceled. Please try again.");
-          console.log("Payment canceled", actions, data);
+
           cartItems.map(async (item) => {
             const requestData = {
               name: payload.firstName + " " + payload.lastName,
@@ -84,8 +86,6 @@ const PayPalButtonComponent = (props) => {
                   result.message || "Failed to save canceled payment details."
                 );
               }
-
-              console.log("Server response:", result);
             } catch (error) {
               // Catch and handle any errors during the request
               console.error("Error sending data:", error);
@@ -96,8 +96,6 @@ const PayPalButtonComponent = (props) => {
         onApprove={(data, actions) => {
           // Capture the payment after approval
           return actions.order.capture().then(async (details) => {
-            console.log("Transaction details:", details);
-
             cartItems.map(async (item) => {
               const payloadData = {
                 name: payload.firstName + " " + payload.lastName,
@@ -122,8 +120,8 @@ const PayPalButtonComponent = (props) => {
                 cc: "USD",
                 payer_email: details.payer.email_address,
                 payment_status: details.status,
+                status: 1,
               };
-              console.log(payloadData);
 
               try {
                 const response = await fetch(
@@ -139,7 +137,6 @@ const PayPalButtonComponent = (props) => {
                 const data = await response.json();
 
                 if (data.status == "success") {
-                  console.log("Submission successful:", data);
                 } else {
                 }
               } catch (err) {
@@ -148,6 +145,7 @@ const PayPalButtonComponent = (props) => {
             });
 
             navigate("/order-succes");
+            dispatch({ type: "clear cart" });
           });
         }}
         onError={(error) => {

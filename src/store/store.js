@@ -87,6 +87,19 @@ const storeReducer = (state = defaultState, action) => {
       cart: updatedCart,
     };
   }
+  // New action to clear the cart
+  if (action.type === "clear cart") {
+    const obj = {
+      ...state,
+      cart: [],
+    };
+
+    localStorage.setItem("state", JSON.stringify(obj));
+    return {
+      ...state,
+      cart: [],
+    };
+  }
 
   return state;
 };

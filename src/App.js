@@ -11,6 +11,13 @@ import Error from "./pages/Error";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import TeacherProfiles from "./pages/TeacherProfiles";
+import ContactForm from "./pages/ContactForm";
+import FAQPage from "./pages/FAQPage";
+import WhoWeAre from "./pages/WhoWeAre";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import RefundPolicy from "./pages/RefundPolicy";
+import TermAndConditions from "./pages/TermAndConditions";
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -33,7 +40,6 @@ const App = () => {
       // clearInterval(aosRefresh);
     };
   }, []);
-  // console.log(process.env.REACT_APP_BASE_URL);
 
   return (
     <>
@@ -45,6 +51,19 @@ const App = () => {
         <Route path="/cart" exact element={<Cart />} />
         <Route path="/checkout" exact element={<Checkout />} />
         <Route path="/order-succes" exact element={<OrderConfirmation />} />
+
+        <Route path="/speakers" exact element={<TeacherProfiles />} />
+        <Route path="/get-in-touch" exact element={<ContactForm />} />
+        <Route path="/faq" exact element={<FAQPage />} />
+        <Route path="/who-we-are" exact element={<WhoWeAre />} />
+        <Route path="/privacy-policy" exact element={<PrivacyPolicy />} />
+        <Route path="/refund-policy" exact element={<RefundPolicy />} />
+        <Route
+          path="/terms-and-conditions"
+          exact
+          element={<TermAndConditions />}
+        />
+
         <Route path="*" exact element={<Error />} />
       </Routes>
     </>

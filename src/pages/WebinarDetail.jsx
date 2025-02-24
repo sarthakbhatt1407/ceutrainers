@@ -14,6 +14,7 @@ import {
 } from "@mui/icons-material";
 import { CiClock1 } from "react-icons/ci";
 import { useDispatch } from "react-redux";
+import { message } from "antd";
 
 // Styled Components (same as before)
 
@@ -246,6 +247,20 @@ const WebinarDetail = () => {
   const navigate = useNavigate();
   const id = useParams().id;
   let tit = useParams().slug;
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const success = (msg) => {
+    messageApi.open({
+      type: "success",
+      content: msg,
+    });
+  };
+  const error = (msg) => {
+    messageApi.open({
+      type: "error",
+      content: msg,
+    });
+  };
 
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -333,7 +348,6 @@ const WebinarDetail = () => {
       return updatedOptions;
     });
   };
-  // Log selected options when "Add to Cart" is clicked
   const handleAddToCart = () => {
     const selectedItems = Object.entries(selectedOptions)
       .filter(([_, option]) => option !== null)
@@ -349,8 +363,14 @@ const WebinarDetail = () => {
         slug: courseData.slug,
       }));
 
-    dispatch({ type: "add to cart", data: selectedItems[0] });
-    navigate("/cart");
+    if (selectedItems.length > 0) {
+      // Only dispatch and navigate if there are selected items
+      dispatch({ type: "add to cart", data: selectedItems[0] });
+      navigate("/cart");
+    } else {
+      // Optionally, provide feedback to the user if no items are selected
+      error("Please select an option before adding to cart.");
+    }
   };
 
   useEffect(() => {
@@ -380,7 +400,6 @@ const WebinarDetail = () => {
         }
 
         const data = await response.json();
-        console.log(data);
 
         if (data.error) {
           console.error("Error:", data.error);
@@ -405,6 +424,7 @@ const WebinarDetail = () => {
 
   return (
     <>
+      {contextHolder}
       <WebNav />
       <Outerbox>
         {loading && (

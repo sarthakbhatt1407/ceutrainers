@@ -137,7 +137,6 @@ const RecentCourses = () => {
       }
 
       const data = await res.json();
-      console.log(data);
 
       setWebinar(data); // Assuming data is structured this way
     } catch (error) {

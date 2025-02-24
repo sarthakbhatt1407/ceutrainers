@@ -23,6 +23,7 @@ const MainDiv = styled.div`
   height: 60vh;
   align-items: center;
   overflow: hidden;
+  margin-top: 2rem;
   @media only screen and (min-width: 351px) and (max-width: 950px) {
     margin-top: 6rem;
   }
@@ -104,7 +105,7 @@ const MidDiv = styled.div`
 const LastDivBox = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background-color: red;
+
   align-items: center;
   justify-content: space-between;
   width: 50%;
@@ -120,6 +121,8 @@ const LastDiv = styled.div`
   align-items: start;
   justify-content: center;
   color: white;
+
+
   img {
     width: 60%;
   }
@@ -201,7 +204,7 @@ const LastDiv = styled.div`
       }
 
       &:hover {
-        color: #d61c01;
+
         transform: scale(1);
       }
 
@@ -270,11 +273,43 @@ const Footer = () => {
         <MidDiv>
           <h2>Company Info</h2>
           <div>
-            <span>About Us</span>
-            <span>Privacy Policy</span>
+            <span
+              onClick={() => {
+                navigate("/who-we-are");
+              }}
+            >
+              About Us
+            </span>
+            <span
+              onClick={() => {
+                navigate("/privacy-policy");
+              }}
+            >
+              Privacy Policy
+            </span>
 
-            <span>Terms and Condition</span>
-            <span>Our Speaker</span>
+            <span
+              onClick={() => {
+                navigate("/terms-and-conditions");
+              }}
+            >
+              Terms and Condition
+            </span>
+            <span
+              onClick={() => {
+                navigate("/refund-policy");
+              }}
+            >
+              Refund Policy
+            </span>
+
+            <span
+              onClick={() => {
+                navigate("/speakers");
+              }}
+            >
+              Our Speaker
+            </span>
           </div>
         </MidDiv>
 

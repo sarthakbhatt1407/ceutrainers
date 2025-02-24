@@ -11,7 +11,7 @@ import PayPalButtonComponent from "../components/PayPalButtonComponent";
 
 const Checkout = () => {
   const [showPaymnet, setShowPayment] = useState(false);
-
+  const [sameAs, setSameAs] = useState(false);
   const [couponLoading, setCouponLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [discount, setDiscount] = useState(0);
@@ -47,6 +47,7 @@ const Checkout = () => {
     address2: "",
   });
   const [formErrors, setFormErrors] = useState({});
+  const [paypalKey, setPaypalKey] = useState(null);
   const [payload, setpayload] = useState(null);
   const [isCouponApplied, setIsCouponApplied] = useState(false);
   const [couponCode, setCouponCode] = useState("");
@@ -54,8 +55,14 @@ const Checkout = () => {
   const [appliedCoupon, setAppliedCoupon] = useState(""); // To store the applied coupon code
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const fetchGateway = async () => {
+    const res = await fetch("https://ceuservices.com/api/gateway_key.php");
+    const data = await res.json();
+    setPaypalKey(data[0].client_id);
+  };
 
   useEffect(() => {
+    fetchGateway();
     document.title = "Checkout";
     let obj;
     if (cartItems.length == 1) {
@@ -64,8 +71,6 @@ const Checkout = () => {
 
       // Check if the extracted value is a valid number
       if (!isNaN(extractedValue)) {
-        console.log(extractedValue);
-
         // Convert the extracted value into an array of numbers
         const attendeeCount = parseInt(extractedValue, 10); // Convert to a number
 
@@ -88,7 +93,6 @@ const Checkout = () => {
         }
         obj = { ...formValues, ...attendeesObj };
         setFormValues(obj);
-        console.log(obj);
       }
     }
   }, [cartItems]);
@@ -149,6 +153,7 @@ const Checkout = () => {
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
     let attendeesData = [];
+
     // Extract attendees data
     if (cartItems.length < 2) {
       attendeesData = attendees.map((_, index) => {
@@ -163,7 +168,6 @@ const Checkout = () => {
     }
 
     // Log the structured attendees array (optional for debugging)
-    // console.log("Attendees:", attendeesData);
 
     // Form validation
     let errors = {};
@@ -186,7 +190,6 @@ const Checkout = () => {
 
     // If validation fails, set errors and stop submission
     if (!isValid) {
-      console.log(formValues);
       setFormErrors(errors);
       error("Please fill in all required fields correctly.");
       return;
@@ -209,6 +212,18 @@ const Checkout = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setShowPayment(false);
+    if (
+      name == "firstName" ||
+      name == "lastName" ||
+      name == "phone" ||
+      name == "email" ||
+      name == "jobTitle"
+    ) {
+      if (value.length < 1) {
+        setChecked(false);
+      }
+    }
     setFormValues((prevState) => ({
       ...prevState,
       [name]: value,
@@ -410,46 +425,53 @@ const Checkout = () => {
                 />
               </InputGroup>
 
-              {attendees && attendees.length < 2 && cartItems.length < 2 && (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "start",
-                    gap: "1rem",
-                    alignItems: "center",
-                  }}
-                >
-                  <Label>Apply Same Details as Above</Label>
-                  <input
-                    type="checkbox"
-                    onChange={(e) => {
-                      const isChecked = e.target.checked;
-
-                      if (isChecked) {
-                        setFormValues((prevState) => ({
-                          ...prevState,
-                          attendee1Name:
-                            formValues.firstName + " " + formValues.lastName,
-                          attendee1Email: formValues.email,
-                          attendee1Phone: formValues.phone,
-                          attendee1JobTitle: formValues.jobTitle,
-                        }));
-                      } else {
-                        setFormValues((prevState) => ({
-                          ...prevState,
-                          attendee1Name: "",
-                          attendee1Email: "",
-                          attendee1Phone: "",
-                          attendee1JobTitle: "",
-                        }));
-                      }
-
-                      console.log(isChecked);
-                      setChecked(isChecked);
+              {attendees &&
+                attendees.length < 2 &&
+                cartItems.length < 2 &&
+                formValues.lastName.length > 0 &&
+                formValues.phone.length > 0 &&
+                formValues.email.length > 0 &&
+                formValues.jobTitle.length > 0 &&
+                formValues.firstName.length > 0 && (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "start",
+                      gap: "1rem",
+                      alignItems: "center",
                     }}
-                  />
-                </div>
-              )}
+                  >
+                    <Label>Apply Same Details as Above</Label>
+                    <input
+                      type="checkbox"
+                      onChange={(e) => {
+                        setShowPayment(false);
+                        const isChecked = e.target.checked;
+                        setSameAs(isChecked);
+                        if (isChecked) {
+                          setFormValues((prevState) => ({
+                            ...prevState,
+                            attendee1Name:
+                              formValues.firstName + " " + formValues.lastName,
+                            attendee1Email: formValues.email,
+                            attendee1Phone: formValues.phone,
+                            attendee1JobTitle: formValues.jobTitle,
+                          }));
+                        } else {
+                          setFormValues((prevState) => ({
+                            ...prevState,
+                            attendee1Name: "",
+                            attendee1Email: "",
+                            attendee1Phone: "",
+                            attendee1JobTitle: "",
+                          }));
+                        }
+
+                        setChecked(isChecked);
+                      }}
+                    />
+                  </div>
+                )}
             </Form>
           </FormCard>
 
@@ -563,7 +585,7 @@ const Checkout = () => {
                   <PaymentLabel>PayPal</PaymentLabel>
                 </PaymentOption>
 
-                <PaymentOption>
+                {/* <PaymentOption>
                   <RadioInput
                     type="radio"
                     name="payment"
@@ -575,7 +597,7 @@ const Checkout = () => {
                     }}
                   />
                   <PaymentLabel>Stripe</PaymentLabel>
-                </PaymentOption>
+                </PaymentOption> */}
               </PaymentOptions>{" "}
               {/* <TotalRow>
                 <TotalLabel>Total:</TotalLabel>
@@ -584,10 +606,11 @@ const Checkout = () => {
                 </TotalValue>
               </TotalRow> */}
             </PaymentSection>
-            {showPaymnet && paymentMethod == "paypal" && (
+            {showPaymnet && paymentMethod == "paypal" && paypalKey && (
               <PayPalButtonComponent
                 price={cartItems.reduce((a, b) => a + b.price, 0) - discount}
                 payload={{ ...payload }}
+                paypalKey={paypalKey}
               />
             )}
             {isFormValid && !showPaymnet && (
@@ -646,6 +669,7 @@ const Checkout = () => {
                             name={`attendee${ind + 1}Name`}
                             onChange={handleChange}
                             required
+                            value={formValues[`attendee${ind + 1}Name`]}
                           />
                           {formErrors[name] && (
                             <Error>{formErrors[name]}</Error>
@@ -661,6 +685,7 @@ const Checkout = () => {
                             name={`attendee${ind + 1}Email`}
                             onChange={handleChange}
                             required
+                            value={formValues[`attendee${ind + 1}Email`]}
                           />
                           {formErrors[email] && (
                             <Error>{formErrors[email]}</Error>
@@ -675,6 +700,7 @@ const Checkout = () => {
                             name={`attendee${ind + 1}JobTitle`}
                             onChange={handleChange}
                             required
+                            value={formValues[`attendee${ind + 1}JobTitle`]}
                           />
                           {formErrors[jobTitle] && (
                             <Error>{formErrors[jobTitle]}</Error>
@@ -689,6 +715,7 @@ const Checkout = () => {
                             name={`attendee${ind + 1}Phone`}
                             onChange={handleChange}
                             required
+                            value={formValues[`attendee${ind + 1}Phone`]}
                           />
                           {formErrors[phone] && (
                             <Error>{formErrors[phone]}</Error>

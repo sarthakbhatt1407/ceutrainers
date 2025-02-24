@@ -38,7 +38,6 @@ function WebNav({ mode, toggleColorMode }) {
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
     setDropdownOpen(!dropdownOpen);
-    console.log(dropdownOpen2);
   };
 
   const handleCloseMenu = () => {
@@ -280,7 +279,10 @@ function WebNav({ mode, toggleColorMode }) {
                 </Typography>
               </MenuItem>
               <MenuItem
-                onClick={() => setActive("Contact")}
+                onClick={() => {
+                  setActive("Contact");
+                  navigate("/who-we-are");
+                }}
                 sx={{
                   py: "6px",
                   px: "24px",
@@ -387,7 +389,7 @@ function WebNav({ mode, toggleColorMode }) {
                 <MenuItem
                   onClick={() => {
                     setActive("help");
-                    navigate("/");
+                    navigate("/get-in-touch");
                     setDropdownOpen(false);
                   }}
                   style={{ borderBottom: "1px solid #e1e0e0" }}
@@ -405,7 +407,7 @@ function WebNav({ mode, toggleColorMode }) {
                 <MenuItem
                   onClick={() => {
                     setActive("help");
-                    navigate("/");
+                    navigate("/faq");
                     setDropdownOpen(false);
                   }}
                 >

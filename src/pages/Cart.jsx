@@ -8,7 +8,7 @@ import Footer from "../components/Footer";
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart);
-  console.log(cartItems);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -344,8 +344,12 @@ const Actions = styled.div`
 const EmptyCartMessage = styled.p`
   font-size: 18px;
   font-weight: 500;
+  height: 30svh;
   color: #3b3b4e;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 2rem;
   font-style: italic;
 `;

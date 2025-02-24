@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import IntroBox from "../components/IntroBox";
 
 import Footer from "../components/Footer";
@@ -11,6 +11,9 @@ import PopularCategories from "../components/PopularCategories";
 import RecentCourses from "../components/RecentCourses";
 
 const Home = () => {
+  useEffect(() => {
+    document.title = "Home";
+  }, []);
   return (
     <>
       <WebNav />
