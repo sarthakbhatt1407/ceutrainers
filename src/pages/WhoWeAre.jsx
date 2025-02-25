@@ -4,6 +4,7 @@ import PagaeHeader from "../components/PagaeHeader";
 import Footer from "../components/Footer";
 import styled from "styled-components";
 import who from "../assets/who.png";
+import who2 from "../assets/who2.png";
 import speker from "../assets/speker.webp";
 import { Card, CardContent, Typography, Grid, Box } from "@mui/material";
 import { Facebook, Instagram, Twitter } from "@mui/icons-material";
@@ -16,6 +17,14 @@ const FirstDiv = styled.div`
   grid-template-columns: 2fr 1fr;
   background-repeat: no-repeat;
   background-color: #f2f6f7;
+`;
+const Who2 = styled.div`
+  background-image: url(${who2});
+  background-size: cover;
+  background-position: center;
+  height: 80vh;
+
+  background-repeat: no-repeat;
 `;
 const HeadingDiv = styled.div`
   font-family: "Raleway", sans-serif;
@@ -236,6 +245,7 @@ const WhoWeAre = () => {
           ))}
         </Grid>
       </div>
+      <Who2></Who2>
       <Footer />
     </>
   );

@@ -18,6 +18,8 @@ import WhoWeAre from "./pages/WhoWeAre";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import RefundPolicy from "./pages/RefundPolicy";
 import TermAndConditions from "./pages/TermAndConditions";
+import LoginPage from "./pages/LoginPage";
+import ProfilePage from "./pages/ProfilePage";
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -58,6 +60,8 @@ const App = () => {
         <Route path="/who-we-are" exact element={<WhoWeAre />} />
         <Route path="/privacy-policy" exact element={<PrivacyPolicy />} />
         <Route path="/refund-policy" exact element={<RefundPolicy />} />
+        <Route path="/login" exact element={<LoginPage />} />
+        <Route path="/profile" exact element={<ProfilePage />} />
         <Route
           path="/terms-and-conditions"
           exact
