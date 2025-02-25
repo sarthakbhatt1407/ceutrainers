@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import WebNav from "../components/Navbars/WebNav";
 import PagaeHeader from "../components/PagaeHeader";
 import Footer from "../components/Footer";
 import styled from "styled-components";
 import who from "../assets/who.png";
 import who2 from "../assets/who2.png";
-import speker from "../assets/speker.webp";
 import { Card, CardContent, Typography, Grid, Box } from "@mui/material";
 import { Facebook, Instagram, Twitter } from "@mui/icons-material";
+
 const FirstDiv = styled.div`
   background-image: url(${who});
   background-size: contain;
@@ -18,14 +18,15 @@ const FirstDiv = styled.div`
   background-repeat: no-repeat;
   background-color: #f2f6f7;
 `;
+
 const Who2 = styled.div`
   background-image: url(${who2});
   background-size: cover;
   background-position: center;
   height: 80vh;
-
   background-repeat: no-repeat;
 `;
+
 const HeadingDiv = styled.div`
   font-family: "Raleway", sans-serif;
   width: 70%;
@@ -45,7 +46,6 @@ const HeadingDiv = styled.div`
   div {
     display: grid;
     grid-template-columns: 1fr 3fr;
-
     div {
       display: flex;
       flex-direction: column;
@@ -72,7 +72,6 @@ const HeadingDiv = styled.div`
       }
       button {
         width: 60%;
-
         margin-top: 1rem;
         border-radius: 2rem;
         display: block;
@@ -85,12 +84,10 @@ const HeadingDiv = styled.div`
         font-size: 16px !important;
         padding: 19px 40px 17px !important;
         transition: 0.3s !important;
-
         &:hover {
           opacity: 0.9;
           background-color: #0b0a36 !important;
         }
-
         @media (max-width: 768px) {
           width: 100% !important;
           padding: 14px 30px !important;
@@ -99,6 +96,7 @@ const HeadingDiv = styled.div`
     }
   }
 `;
+
 const H2 = styled.h2`
   font-size: 55px;
   line-height: 65px;
@@ -112,7 +110,7 @@ const H2 = styled.h2`
   margin: 2rem 0;
 `;
 
-const TeacherCard = ({ name, role, image, bg }) => {
+const TeacherCard = ({ name, designation, images }) => {
   return (
     <Card
       sx={{ textAlign: "center", borderRadius: 3, boxShadow: 3, p: 1 }}
@@ -120,7 +118,7 @@ const TeacherCard = ({ name, role, image, bg }) => {
     >
       <Box sx={{ borderRadius: "50%", p: 1, display: "inline-block" }}>
         <img
-          src={speker}
+          src={`https://ceuservices.com/ceuadmin/assets/images/speaker/${images}`}
           alt={name}
           style={{
             width: 300,
@@ -135,7 +133,7 @@ const TeacherCard = ({ name, role, image, bg }) => {
           {name}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {role}
+          {designation}
         </Typography>
         <Box mt={1} display="flex" justifyContent="center" gap={1}>
           <Facebook fontSize="small" color="action" />
@@ -148,48 +146,27 @@ const TeacherCard = ({ name, role, image, bg }) => {
 };
 
 const WhoWeAre = () => {
+  const [teachers, setTeachers] = useState([]);
+
   useEffect(() => {
     document.title = "About Us";
     document.body.scrollTop = document.documentElement.scrollTop = 0;
+
+    const fetchTeachers = async () => {
+      try {
+        const response = await fetch(
+          "https://ceuservices.com/api/speaker_detail.php"
+        );
+        const data = await response.json();
+        setTeachers(data);
+      } catch (error) {
+        console.error("Error fetching teachers:", error);
+      }
+    };
+
+    fetchTeachers();
   }, []);
-  const teachers = [
-    {
-      name: "Casey Hall",
-      role: "Teacher",
-      image: "casey.jpg",
-      bg: "#f8e1c1",
-    },
-    {
-      name: "Taylor Robertson",
-      role: "Teacher",
-      image: "taylor.jpg",
-      bg: "#cdeefb",
-    },
-    {
-      name: "Reed Bauer",
-      role: "Teacher",
-      image: "reed.jpg",
-      bg: "#c2e6a0",
-    },
-    {
-      name: "Reed Bauer",
-      role: "Teacher",
-      image: "reed.jpg",
-      bg: "#c2e6a0",
-    },
-    {
-      name: "Reed Bauer",
-      role: "Teacher",
-      image: "reed.jpg",
-      bg: "#c2e6a0",
-    },
-    {
-      name: "Reed Bauer",
-      role: "Teacher",
-      image: "reed.jpg",
-      bg: "#c2e6a0",
-    },
-  ];
+
   return (
     <>
       <WebNav />
@@ -203,7 +180,6 @@ const WhoWeAre = () => {
           <div>
             <div></div>
             <div>
-              {" "}
               <p data-aos="fade-up">
                 <p>Upgrade Your Skills </p>
                 <p>Upgrade Your Life</p>
@@ -225,15 +201,13 @@ const WhoWeAre = () => {
           padding: "2.5rem 0",
         }}
       >
-        {" "}
-        <H2>World-Class Experts</H2>{" "}
+        <H2>World-Class Experts</H2>
         <Grid
           container
           spacing={3}
           justifyContent="center"
           sx={{
             mt: 4,
-
             width: "80%",
             margin: "auto",
           }}

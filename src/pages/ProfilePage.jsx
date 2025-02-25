@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -23,12 +23,42 @@ import styled from "styled-components";
 import Footer from "../components/Footer";
 import WebNav from "../components/Navbars/WebNav";
 import PagaeHeader from "../components/PagaeHeader";
+import { useDispatch, useSelector } from "react-redux";
+import MusicLoader from "../components/Loader/MusicLoader";
+import { AccountCircleOutlined } from "@mui/icons-material";
+import { Divider } from "antd";
+import { useNavigate } from "react-router";
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   paddingTop: "2rem",
   paddingBottom: "2rem",
 }));
 
+const ButtonNext = styled.button`
+  width: 15%;
+  background-color: #0b0a36;
+  border-radius: 2rem;
+  display: block;
+  color: white;
+  text-transform: uppercase;
+  border: none;
+  font-family: "Raleway", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: uppercase;
+  padding: 11px 10px 11px;
+  transition: 0.3s;
+  margin-top: 2rem;
+  &:hover {
+    opacity: 0.9;
+    background-color: #408a78;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 14px 30px;
+  }
+`;
 const ProfileHeader = styled(Box)({
   display: "flex",
   alignItems: "center",
@@ -44,79 +74,99 @@ const TabPanel = ({ children, value, index }) => (
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [orderData, setOrderData] = useState([]);
   const [expandedOrder, setExpandedOrder] = useState(null);
+  const userId = useSelector((state) => state.userId);
 
-  const userData = {
-    fullName: "John Doe",
-    email: "john.doe@example.com",
-    phone: "+1 (555) 123-4567",
-    profilePicture:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://ceuservices.com/api/customer_detail.php",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ user_id: userId }),
+          }
+        );
 
-  const orderData = [
-    {
-      orderNumber: "ORD-001",
-      date: "2024-01-15",
-      amount: "$299.99",
-      status: "Delivered",
-      details: "This is the detail of order ORD-001.",
-    },
-    {
-      orderNumber: "ORD-002",
-      date: "2024-01-10",
-      amount: "$149.99",
-      status: "Processing",
-      details: "This is the detail of order ORD-002.",
-    },
-    {
-      orderNumber: "ORD-003",
-      date: "2024-01-05",
-      amount: "$499.99",
-      status: "Shipped",
-      details: "This is the detail of order ORD-003.",
-    },
-  ];
+        const data = await response.json();
+        if (response.ok) {
+          setUserData(data.user_info);
+          setOrderData(data.orders);
+        } else {
+          setError(data.message);
+        }
+      } catch (error) {
+        setError("Failed to fetch data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [userId]);
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
 
-  const handleExpandClick = (orderNumber) => {
-    setExpandedOrder(expandedOrder === orderNumber ? null : orderNumber);
+  const handleExpandClick = (orderId) => {
+    setExpandedOrder(expandedOrder === orderId ? null : orderId);
   };
 
   const AccountInfo = () => (
     <Box>
       <ProfileHeader>
-        <Avatar
-          src={userData.profilePicture}
-          alt={userData.fullName}
+        {/* <Avatar
+          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+          alt={userData.name}
           sx={{ width: 120, height: 120 }}
+        /> */}
+        <AccountCircleOutlined
+          style={{ width: 100, height: 100, color: "#3F8978" }}
         />
         <Box>
           <Typography variant="h4" gutterBottom>
-            {userData.fullName}
+            {userData.name}
           </Typography>
-          <Button variant="outlined" startIcon={<FiEdit2 />} sx={{ mt: 1 }}>
-            Edit Profile
-          </Button>
         </Box>
       </ProfileHeader>
 
       <Box sx={{ mt: 4 }}>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h5" gutterBottom>
           Personal Information
         </Typography>
+        <Divider />
         <Box sx={{ mt: 2 }}>
           <Typography variant="body1" gutterBottom>
             <strong>Email:</strong> {userData.email}
           </Typography>
           <Typography variant="body1" gutterBottom>
-            <strong>Phone:</strong> {userData.phone}
+            <strong>Phone:</strong> {userData.number}
           </Typography>
+
+          <Typography variant="body1" gutterBottom>
+            <strong>Address:</strong> {userData.address}, {userData.address2},{" "}
+            {userData.city}, {userData.state}, {userData.country},{" "}
+            {userData.pin_code}
+          </Typography>
+          <ButtonNext
+            sx={{ mt: 2, mb: 2 }}
+            onClick={() => {
+              dispatch({ type: "logout" });
+              navigate("/login");
+            }}
+          >
+            Logout
+          </ButtonNext>
         </Box>
       </Box>
     </Box>
@@ -130,23 +180,21 @@ const ProfilePage = () => {
             <TableCell>Order Number</TableCell>
             <TableCell>Date</TableCell>
             <TableCell>Amount</TableCell>
-            <TableCell>Status</TableCell>
             <TableCell>Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {orderData.map((order) => (
-            <React.Fragment key={order.orderNumber}>
+            <React.Fragment key={order.order_id}>
               <TableRow sx={{ borderBottom: "none" }}>
-                <TableCell>{order.orderNumber}</TableCell>
-                <TableCell>{order.date}</TableCell>
-                <TableCell>{order.amount}</TableCell>
-                <TableCell>{order.status}</TableCell>
+                <TableCell>{order.order_id}</TableCell>
+                <TableCell>{order.trans_date}</TableCell>
+                <TableCell>${order.amount}</TableCell>
                 <TableCell>
                   <Button
                     size="small"
                     variant="text"
-                    onClick={() => handleExpandClick(order.orderNumber)}
+                    onClick={() => handleExpandClick(order.order_id)}
                   >
                     View Details
                   </Button>
@@ -155,21 +203,23 @@ const ProfilePage = () => {
               <TableRow sx={{ borderBottom: "none" }}>
                 <TableCell colSpan={5}>
                   <Collapse
-                    in={expandedOrder === order.orderNumber}
+                    in={expandedOrder === order.order_id}
                     timeout="auto"
                     unmountOnExit
                   >
                     <Box margin={1}>
                       <Typography variant="body2">
-                        <strong>Order Number:</strong> {order.orderNumber}
+                        <strong>Webinar:</strong> {order.title}
                       </Typography>
                       <Typography variant="body2">
-                        <strong>Order Date:</strong> {order.date}
+                        <strong>Order Number:</strong> {order.order_id}
                       </Typography>
                       <Typography variant="body2">
-                        <strong>Order Amount:</strong> {order.amount}
+                        <strong>Order Date:</strong> {order.trans_date}
                       </Typography>
-                      <Typography variant="body2">{order.details}</Typography>
+                      <Typography variant="body2">
+                        <strong>Order Amount:</strong> ${order.amount}
+                      </Typography>
                     </Box>
                   </Collapse>
                 </TableCell>
@@ -181,14 +231,12 @@ const ProfilePage = () => {
     </TableContainer>
   );
 
-  if (loading) return <CircularProgress />;
-  if (error) return <Alert severity="error">{error}</Alert>;
-
   return (
     <>
       <WebNav />
       <PagaeHeader heading="Profile" />
       <StyledContainer maxWidth="lg">
+        {loading && <MusicLoader />}
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
             value={activeTab}
@@ -209,7 +257,7 @@ const ProfilePage = () => {
         </Box>
 
         <TabPanel value={activeTab} index={0}>
-          <AccountInfo />
+          {userData && <AccountInfo />}
         </TabPanel>
         <TabPanel value={activeTab} index={1}>
           <OrdersInfo />

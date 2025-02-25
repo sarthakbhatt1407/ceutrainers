@@ -47,6 +47,8 @@ const App = () => {
     <>
       <Routes>
         <Route path="/" exact element={<Home />} />
+        {!isLoggedIn && <Route path="/login" exact element={<LoginPage />} />}
+        {isLoggedIn && <Route path="/login" exact element={<Home />} />}
         <Route path="/webinars" exact element={<Webinars />} />
 
         <Route path="/webinars/:slug/:id" exact element={<WebinarDetail />} />
@@ -60,8 +62,11 @@ const App = () => {
         <Route path="/who-we-are" exact element={<WhoWeAre />} />
         <Route path="/privacy-policy" exact element={<PrivacyPolicy />} />
         <Route path="/refund-policy" exact element={<RefundPolicy />} />
-        <Route path="/login" exact element={<LoginPage />} />
-        <Route path="/profile" exact element={<ProfilePage />} />
+
+        {isLoggedIn && (
+          <Route path="/profile" exact element={<ProfilePage />} />
+        )}
+        {!isLoggedIn && <Route path="/profile" exact element={<LoginPage />} />}
         <Route
           path="/terms-and-conditions"
           exact

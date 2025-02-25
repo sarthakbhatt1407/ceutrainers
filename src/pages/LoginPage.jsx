@@ -8,17 +8,18 @@ import {
   CircularProgress,
   FormControl,
   FormControlLabel,
-  IconButton,
   Typography,
   useTheme,
 } from "@mui/material";
 import { Input } from "antd";
-import { FaUser, FaLock, FaGoogle, FaGithub } from "react-icons/fa";
+import { FaUser, FaLock } from "react-icons/fa";
 import { debounce } from "lodash";
 import styled from "styled-components";
 import Footer from "../components/Footer";
 import WebNav from "../components/Navbars/WebNav";
 import PagaeHeader from "../components/PagaeHeader";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 
 const StyledCard = styled(Card)`
   width: 70%;
@@ -63,13 +64,14 @@ const ButtonNext = styled.button`
 `;
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const theme = useTheme();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [errors, setErrors] = useState({});
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
@@ -79,30 +81,12 @@ const LoginPage = () => {
   }, 300);
 
   const validatePassword = debounce((password) => {
-    return password.length >= 8;
+    return password.length >= 4;
   }, 300);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-
-    if (name === "email") {
-      setErrors((prev) => ({
-        ...prev,
-        email: !validateEmail(value)
-          ? "Please enter a valid email address"
-          : "",
-      }));
-    }
-
-    if (name === "password") {
-      setErrors((prev) => ({
-        ...prev,
-        password: !validatePassword(value)
-          ? "Password must be at least 8 characters"
-          : "",
-      }));
-    }
   };
 
   const handleSubmit = async (event) => {
@@ -115,9 +99,28 @@ const LoginPage = () => {
     ) {
       setLoading(true);
       try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        console.log("Form submitted:", formData);
+        const response = await fetch("https://ceuservices.com/api/login.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          dispatch({ type: "log in", userId: data.user_id });
+          console.log("Login successful:", data);
+          navigate("/");
+          // Handle successful login (e.g., redirect to dashboard)
+        } else {
+          console.error("Login failed:", data);
+
+          // Handle login failure (e.g., show error message)
+        }
       } catch (error) {
         console.error("Login error:", error);
       } finally {
@@ -158,9 +161,9 @@ const LoginPage = () => {
                   style={{
                     fontWeight: "800",
                     fontSize: "16px",
-                    fontFamilymily: "Raleway",
+                    fontFamily: "Raleway",
                     lineHeight: "27px",
-                    marg: "9px",
+                    margin: "9px",
                     color: "#090A36",
                   }}
                 >
@@ -193,9 +196,9 @@ const LoginPage = () => {
                   style={{
                     fontWeight: "800",
                     fontSize: "16px",
-                    fontFamilymily: "Raleway",
+                    fontFamily: "Raleway",
                     lineHeight: "27px",
-                    marg: "9px",
+                    margin: "9px",
                     color: "#0b0a36",
                   }}
                 >

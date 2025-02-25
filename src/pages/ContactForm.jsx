@@ -93,7 +93,7 @@ const Row = styled.div`
   margin-bottom: 1rem;
 `;
 const ContactSection = styled.div`
-  width: 90%;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   margin-top: 40px;
@@ -179,14 +179,14 @@ const ContactForm = () => {
             <div>
               {" "}
               <ContactItem>
-                <FaPhone color="#3F8978" /> +1 (333) 222 12 34
+                <FaPhone color="#3F8978" /> (702)-605-0095
               </ContactItem>
               <ContactItem
                 style={{
                   marginLeft: "2rem",
                 }}
               >
-                <FaEnvelope color="#3F8978" /> hello@edme.com
+                <FaEnvelope color="#3F8978" /> support@ceutrainers.com
               </ContactItem>
             </div>
           </div>
@@ -194,7 +194,9 @@ const ContactForm = () => {
             <h5>Hour of operation</h5>
             <div>
               {" "}
-              <ContactItem>Monday – Friday: 09:00 – 20:00</ContactItem>
+              <ContactItem>
+                Mon - Fri : 09:00 - 20:00 | Sat : 10:00 - 14:00
+              </ContactItem>
             </div>
           </div>
           <div>
@@ -202,8 +204,8 @@ const ContactForm = () => {
             <div>
               {" "}
               <ContactItem>
-                <FaMapMarkerAlt color="#3F8978" /> 1800 Abbot Kinney Blvd. Unit
-                D & E Venice
+                <FaMapMarkerAlt color="#3F8978" /> 304 S. Jones Blvd #5255, Las
+                Vegas, NV, 89107 United States
               </ContactItem>
             </div>
           </div>

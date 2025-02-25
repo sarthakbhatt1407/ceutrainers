@@ -1,56 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, Typography, Grid, Box } from "@mui/material";
 import { Facebook, Instagram, Twitter } from "@mui/icons-material";
-import speker from "../assets/speker.webp";
 import WebNav from "../components/Navbars/WebNav";
 import PagaeHeader from "../components/PagaeHeader";
 import Footer from "../components/Footer";
+import MusicLoader from "../components/Loader/MusicLoader";
 
-const teachers = [
-  {
-    name: "Casey Hall",
-    role: "Teacher",
-    image: "casey.jpg",
-    bg: "#f8e1c1",
-  },
-  {
-    name: "Taylor Robertson",
-    role: "Teacher",
-    image: "taylor.jpg",
-    bg: "#cdeefb",
-  },
-  {
-    name: "Reed Bauer",
-    role: "Teacher",
-    image: "reed.jpg",
-    bg: "#c2e6a0",
-  },
-  {
-    name: "Reed Bauer",
-    role: "Teacher",
-    image: "reed.jpg",
-    bg: "#c2e6a0",
-  },
-  {
-    name: "Reed Bauer",
-    role: "Teacher",
-    image: "reed.jpg",
-    bg: "#c2e6a0",
-  },
-  {
-    name: "Reed Bauer",
-    role: "Teacher",
-    image: "reed.jpg",
-    bg: "#c2e6a0",
-  },
-];
-
-const TeacherCard = ({ name, role, image, bg }) => {
+const TeacherCard = ({ name, designation, images }) => {
   return (
-    <Card sx={{ textAlign: "center", borderRadius: 3, boxShadow: 3, p: 1 }}>
+    <Card
+      sx={{
+        textAlign: "center",
+        borderRadius: 3,
+        boxShadow: 3,
+        p: 1,
+        height: "450px",
+      }}
+    >
       <Box sx={{ borderRadius: "50%", p: 1, display: "inline-block" }}>
+        {console.log(
+          `https://ceuservices.com/ceuadmin/assets/images/speaker/${images}`
+        )}
         <img
-          src={speker}
+          src={`https://ceuservices.com/ceuadmin/assets/images/speaker/${images}`}
           alt={name}
           style={{
             width: 300,
@@ -65,7 +37,7 @@ const TeacherCard = ({ name, role, image, bg }) => {
           {name}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {role}
+          {designation}
         </Typography>
         <Box mt={1} display="flex" justifyContent="center" gap={1}>
           <Facebook fontSize="small" color="action" />
@@ -78,10 +50,30 @@ const TeacherCard = ({ name, role, image, bg }) => {
 };
 
 const TeacherProfiles = () => {
+  const [teachers, setTeachers] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     document.title = "Our Speakers";
     document.body.scrollTop = document.documentElement.scrollTop = 0;
+
+    const fetchTeachers = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          "https://ceuservices.com/api/speaker_detail.php"
+        );
+        const data = await response.json();
+        setTeachers(data);
+      } catch (error) {
+        console.error("Error fetching teachers:", error);
+      }
+      setLoading(false);
+    };
+
+    fetchTeachers();
   }, []);
+
   return (
     <>
       <WebNav />
@@ -97,6 +89,7 @@ const TeacherProfiles = () => {
           margin: "auto",
         }}
       >
+        {loading && <MusicLoader />}
         {teachers.map((teacher) => (
           <Grid item key={teacher.name} xs={12} sm={6} md={4}>
             <TeacherCard {...teacher} />

@@ -20,7 +20,6 @@ function WebNav({ mode, toggleColorMode }) {
   const navigate = useNavigate();
   const path = useLocation().pathname;
   const cart = useSelector((state) => state.cart);
-  const isAdmin = useSelector((state) => state.isAdmin);
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState(
@@ -460,38 +459,75 @@ function WebNav({ mode, toggleColorMode }) {
               </MenuItem>
             </Box>
           </Box>
-          {/* 
-          <Box
-            sx={{
-              display: { xs: "none", md: "flex" },
-              gap: 0.5,
-              alignItems: "center",
-            }}
-          >
-            <Button
-              component="a"
-              target="_blank"
-              style={{
-                backgroundColor: "white",
-                textTransform: "uppercase",
-                border: "1px solid #afafafe7",
-                padding: ".6rem 1rem",
-                borderRadius: "1rem",
+
+          {!isLoggedIn && (
+            <Box
+              sx={{
+                display: { xs: "none", md: "flex" },
+                gap: 0.5,
+                alignItems: "center",
               }}
             >
-              <Link
+              <Button
+                component="a"
+                target="_blank"
                 style={{
-                  color: "black",
-                  fontWeight: "bolder",
-                  fontSize: ".9rem",
-                  fontFamily: "Raleway",
-                  textDecoration: "none",
+                  backgroundColor: "white",
+                  textTransform: "uppercase",
+                  border: "1px solid #afafafe7",
+                  padding: ".6rem 1rem",
+                  borderRadius: "1rem",
                 }}
               >
-                Register
-              </Link>
-            </Button>
-          </Box> */}
+                <Link
+                  to={"/login"}
+                  style={{
+                    color: "black",
+                    fontWeight: "bolder",
+                    fontSize: ".9rem",
+                    fontFamily: "Raleway",
+                    textDecoration: "none",
+                  }}
+                >
+                  Login
+                </Link>
+              </Button>
+            </Box>
+          )}
+          {isLoggedIn && (
+            <Box
+              sx={{
+                display: { xs: "none", md: "flex" },
+                gap: 0.5,
+                alignItems: "center",
+              }}
+            >
+              <Button
+                component="a"
+                target="_blank"
+                style={{
+                  backgroundColor: "white",
+                  textTransform: "uppercase",
+                  border: "1px solid #afafafe7",
+                  padding: ".6rem 1rem",
+                  borderRadius: "1rem",
+                }}
+              >
+                <Link
+                  to={"/profile"}
+                  style={{
+                    color: "black",
+                    fontWeight: "bolder",
+                    fontSize: ".9rem",
+                    fontFamily: "Raleway",
+                    textDecoration: "none",
+                  }}
+                >
+                  Profile
+                </Link>
+              </Button>
+            </Box>
+          )}
           <Box sx={{ display: { sm: "", md: "none" } }}>
             <Button
               variant="text"

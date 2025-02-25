@@ -12,20 +12,19 @@ const defaultState = {
 // Reducer to handle different actions
 const storeReducer = (state = defaultState, action) => {
   if (action.type === "log in") {
-    const data = action.data;
-    const user = data.user;
+    const userId = action.userId;
 
     const obj = {
       ...state,
       isLoggedIn: true,
-      userId: user.id,
+      userId: userId,
     };
 
     localStorage.setItem("state", JSON.stringify(obj));
     return {
       ...state,
       isLoggedIn: true,
-      userId: user.id,
+      userId: userId,
     };
   }
 
