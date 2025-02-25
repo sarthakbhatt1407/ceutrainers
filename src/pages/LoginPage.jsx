@@ -174,7 +174,7 @@ const LoginPage = () => {
                   prefix={<FaUser />}
                   placeholder="Email Address"
                   style={{
-                    height: "6svh",
+                    height: "7.5svh",
                     borderRadius: ".5rem",
                   }}
                 />
@@ -208,7 +208,7 @@ const LoginPage = () => {
                   onChange={handleChange}
                   prefix={<FaLock />}
                   style={{
-                    height: "6svh",
+                    height: "7.5svh",
                     borderRadius: ".5rem",
                   }}
                   iconRender={(visible) => (visible ? "👁" : "👁️‍")}
