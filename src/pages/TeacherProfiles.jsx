@@ -87,6 +87,8 @@ const TeacherProfiles = () => {
           backgroundColor: "#FFFFFF",
           width: "80%",
           margin: "auto",
+          position: "relative",
+          minHeight: "50svh",
         }}
       >
         {loading && <MusicLoader />}

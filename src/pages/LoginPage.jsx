@@ -11,7 +11,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { Input } from "antd";
+import { Input, message } from "antd";
 import { FaUser, FaLock } from "react-icons/fa";
 import { debounce } from "lodash";
 import styled from "styled-components";
@@ -111,13 +111,15 @@ const LoginPage = () => {
         });
 
         const data = await response.json();
-        if (response.ok) {
+        if (data.status == 1) {
+          message.success("Login successful");
           dispatch({ type: "log in", userId: data.user_id });
           console.log("Login successful:", data);
           navigate("/");
           // Handle successful login (e.g., redirect to dashboard)
         } else {
           console.error("Login failed:", data);
+          message.error(data.message);
 
           // Handle login failure (e.g., show error message)
         }

@@ -235,7 +235,7 @@ const ProfilePage = () => {
     <>
       <WebNav />
       <PagaeHeader heading="Profile" />
-      <StyledContainer maxWidth="lg">
+      <StyledContainer maxWidth="lg" style={{ position: "relative" }}>
         {loading && <MusicLoader />}
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
