@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { TextField, Button } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
@@ -8,6 +8,7 @@ import Footer from "../components/Footer";
 import contact from "../assets/contact.png";
 import { AccountCircle } from "@mui/icons-material";
 import { FaEnvelope, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
+import { message } from "antd";
 
 const Container = styled.div`
   display: flex;
@@ -126,10 +127,58 @@ const ContactItem = styled.div`
 `;
 
 const ContactForm = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [messageContent, setMessageContent] = useState("");
+
   useEffect(() => {
     document.title = "Contact Us";
     document.body.scrollTop = document.documentElement.scrollTop = 0;
   }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    if (name.length <= 1) {
+      message.error("Name must be longer than 1 character.");
+      return;
+    }
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      message.error("Please enter a valid email address.");
+      return;
+    }
+    if (messageContent.length <= 2) {
+      message.error("Message must be longer than 2 characters.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "https://ceuservices.com/api/contact-form.php",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, email, message: messageContent }),
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      if (response.ok) {
+        message.success("Message sent successfully!");
+        setName("");
+        setEmail("");
+        setMessageContent("");
+      } else {
+        message.error("Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      message.error("Failed to send message. Please try again.");
+    }
+  };
+
   return (
     <>
       <WebNav />
@@ -139,13 +188,15 @@ const ContactForm = () => {
           <ImageContainer>
             <Image src={contact} alt="Teaching" />
           </ImageContainer>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Title>Leave your thought here</Title>
             <Row>
               <StyledTextField
                 label="Your Name"
                 fullWidth
                 variant="outlined"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <AccountCircle style={{ marginRight: 8, color: "#ccc" }} />
@@ -156,6 +207,8 @@ const ContactForm = () => {
                 label="Your Email"
                 fullWidth
                 variant="outlined"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 InputProps={{
                   startAdornment: (
                     <EmailIcon style={{ marginRight: 8, color: "#ccc" }} />
@@ -169,15 +222,18 @@ const ContactForm = () => {
               multiline
               rows={10}
               variant="outlined"
+              value={messageContent}
+              onChange={(e) => setMessageContent(e.target.value)}
             />
-            <SubmitButton variant="contained">SEND MESSAGE</SubmitButton>
+            <SubmitButton type="submit" onClick={handleSubmit}>
+              SEND MESSAGE
+            </SubmitButton>
           </Form>
         </FormContainer>
         <ContactSection>
           <div>
             <h5>Contacts</h5>
             <div>
-              {" "}
               <ContactItem>
                 <FaPhone color="#3F8978" /> (702)-605-0095
               </ContactItem>
@@ -193,7 +249,6 @@ const ContactForm = () => {
           <div>
             <h5>Hour of operation</h5>
             <div>
-              {" "}
               <ContactItem>
                 Mon - Fri : 09:00 - 20:00 | Sat : 10:00 - 14:00
               </ContactItem>
@@ -202,7 +257,6 @@ const ContactForm = () => {
           <div>
             <h5>Address</h5>
             <div>
-              {" "}
               <ContactItem>
                 <FaMapMarkerAlt color="#3F8978" /> 304 S. Jones Blvd #5255, Las
                 Vegas, NV, 89107 United States

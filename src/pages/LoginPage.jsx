@@ -115,7 +115,7 @@ const LoginPage = () => {
           message.success("Login successful");
           dispatch({ type: "log in", userId: data.user_id });
           console.log("Login successful:", data);
-          navigate("/");
+          navigate("/profile");
           // Handle successful login (e.g., redirect to dashboard)
         } else {
           console.error("Login failed:", data);
